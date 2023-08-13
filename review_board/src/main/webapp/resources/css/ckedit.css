@@ -1,0 +1,6 @@
+.ck.ck-editor {
+	max-width: 500px;
+}
+.ck-editor__editable {
+    min-height: 300px;
+}

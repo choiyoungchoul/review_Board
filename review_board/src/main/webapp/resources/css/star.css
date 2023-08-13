@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+.star fieldset{
+    display: inline-block;
+    direction: rtl;
+    border:0;
+}
+.star fieldset legend{
+    text-align: right;
+}
+.star input[type=radio]{
+    display: none;
+}
+.star label{
+    font-size: 2.5em;
+    color: transparent;
+    text-shadow: 0 0 0 #f0f0f0;
+}
+.starList span {
+    font-size: 1.15em;
+    color: transparent;
+    text-shadow: 0 0 0 rgb(250, 208, 0, 0.99);
+}
+.star label:hover{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+.star label:hover ~ label{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+.star input[type=radio]:checked ~ label{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}

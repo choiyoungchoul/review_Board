@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.board.mapper.BoardMapper">
+
+	    <!-- 게시글 리스트 불러오는 처리 -->
+	    <select id="qrySelectList"  resultType="com.board.vo.BoardVo">
+	         SELECT
+	            IDX 
+	         	,  TITLE
+	         	,  REGDATE
+	         	,  COUNT
+	         	,  GRADES
+	         	,  CONTENT_TITLE
+	         	,  WRITER
+	         FROM SPABOARD.TB_BOARD
+	         <if test="srchTxt != null and srchTxt != ''">
+                  <choose>
+                      <when test='srchType eq "conTit"'>
+                          WHERE CONTENT_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                      </when>
+                      <when test='srchType eq "revTit"'>
+                          WHERE TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                      </when>
+                      <when test='srchType eq "writer"'>
+                          WHERE WRITER LIKE CONCAT('%', #{srchTxt}, '%')
+                      </when>
+                  </choose>
+             </if>
+	         ORDER BY REGDATE DESC
+	         LIMIT #{page}, #{amount}
+    	</select>	
+    	
+    	
+    	<!-- 게시글 총 개수 가져오는 처리 -->
+    	<select id="qryTotalCount" resultType="integer">
+    		SELECT 
+    			COUNT(*)
+    		FROM SPABOARD.TB_BOARD
+			<if test="srchTxt != null and srchTxt != ''">
+                  <choose>
+                      <when test='srchType eq "conTit"'>
+                          WHERE CONTENT_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                      </when>
+                      <when test='srchType eq "revTit"'>
+                          WHERE TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                      </when>
+                      <when test='srchType eq "writer"'>
+                          WHERE WRITER LIKE CONCAT('%', #{srchTxt}, '%')
+                      </when>
+                  </choose>
+             </if>
+    	</select>
+    	
+    	
+    	<!-- 글 등록 처리 -->
+  	    <insert id="insContent">
+			INSERT INTO SPABOARD.TB_BOARD (	
+	   				TITLE 
+	   				, CONTENTS
+	   				, REGDATE
+	   				, UPDDATE
+	   				, COUNT
+	   				, GRADES
+	   				, CONTENT_TITLE
+	   				, WRITER
+	   		)
+	    	VALUES (
+		    	   #{title} 
+		           , #{contents}
+		           , now()
+		           , now()
+		           , #{count}
+		           , #{grades}
+		           , #{content_title}
+		           , #{writer} )
+    	</insert>
+    	
+    	
+    	<!-- 글 정보 가져오기 -->
+    	<select id="qryDetail" resultType="com.board.vo.BoardVo">
+    		SELECT
+    		    IDX
+    			,  TITLE
+    			,  CONTENTS
+		    	,  REGDATE
+	         	,  COUNT
+	         	,  GRADES
+	         	,  CONTENT_TITLE
+	         	,  WRITER
+	         FROM SPABOARD.TB_BOARD
+	         WHERE IDX = #{idx}
+    	</select>
+    	
+    	
+    	<!-- 글 삭제하기 -->
+    	<delete id="qryDelete">
+    		DELETE FROM SPABOARD.TB_BOARD
+    		WHERE IDX = #{idx}
+    	</delete>
+    	
+    	
+    	<!-- 글 수정하기 -->
+    	<update id="qryUpdate">
+    		UPDATE SPABOARD.TB_BOARD
+    		SET     TITLE            =  #{title}
+	    		 ,  CONTENTS         =  #{contents}
+	    		 ,  GRADES           =  #{grades}
+	    		 ,  CONTENT_TITLE    =  #{content_title}
+    			 ,  UPDDATE          =  now()
+    		WHERE IDX = #{idx}
+    	</update>
+    	
+    	<!-- 글 조회수 올리기 -->
+    	<update id="qryCountUp">
+    		UPDATE SPABOARD.TB_BOARD
+    		SET    COUNT = COUNT + 1
+    	    WHERE IDX = #{idx}
+    	</update>
+	
+</mapper>

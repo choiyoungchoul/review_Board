@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+
+<mapper namespace="com.member.mapper.MemberMapper">
+	
+		
+		<!-- ID 아이디 조회 -->
+	    <select id="qryGetFindOne" resultType="com.member.vo.MemberVo" >
+            SELECT
+				ID ,
+				PASSWORD ,
+				ROLE
+			FROM 
+				SPABOARD.TB_MEMBER TM
+			WHERE ID = #{insertedUserId}
+    	</select>
+    	
+    	
+    	<insert id="insJoinMember">
+			INSERT INTO SPABOARD.TB_MEMBER (	
+	   				ID 
+	   				, PASSWORD
+	   				, EMAIL
+	   				, NAME
+	   				, REGDATE
+	   				, UPDDATE
+	   				, ROLE
+	   				, AGE	)
+	    	VALUES (
+		    	   #{id} 
+		           , #{password}
+		           , #{email}
+		           , #{name}
+		           , now()
+		           , now()
+		           , #{role}
+		           , #{age} )
+    	</insert>
+	
+</mapper>
