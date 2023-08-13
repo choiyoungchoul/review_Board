@@ -55,7 +55,7 @@ public class BoardController {
     public ModelAndView qryMainPageMethod(@AuthenticationPrincipal UserDetails user, GetBoardVo insParam) {
     	
         //ModelAndView (데이터와 뷰를 동시에 설정이 가능)
-    	//@AuthenticationPrincipal 어노테이션은 현재 로그인 한 유저의 정보를 불러오는 어노테이션(시큐리티에서 제공)  
+    	//@AuthenticationPrincipal 어노테이션은 현재 로그인 한 유저의 정보를 불러오는 어노테이션(시큐리티에서 제공)
         ModelAndView mv = new ModelAndView();
         
         //메인 페이지는 최근 등록 된 게시글 순으로 보여짐
