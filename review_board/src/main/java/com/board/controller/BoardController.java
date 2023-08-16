@@ -121,7 +121,7 @@ public class BoardController {
     
     
 	/**
-	 * 상세 설명
+	 * 상세 설명  
 	 * 게시글 등록 페이지 이동 컨트롤러
 	 * @author 최영철
 	 * @since 2023. 7. 25.
