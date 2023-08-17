@@ -23,17 +23,7 @@
 <body>
 
 <div class="container">
-
-
-			
-		<!-- 상위 차트 영역 -->	
-		<div style="width: 400px; height: 250px;">
-			<h3>평점 상위랭크</h3>
-			<!--차트가 그려질 부분-->
-			<canvas id="myChart"></canvas>
-		</div>		
-		<!-- 상위 차트 영역 END -->		
-
+		
     	<!-- 로그인 및 로그아웃 메뉴 영역-->
 		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 		  <div class="container-fluid">
@@ -48,6 +38,7 @@
 					<a id="joinBtn" type="button" class="btn btn-primary" style="display:none" href="/board/join">회원가입</a>
 					<button id="memberTxt" type="button" class="btn btn-primary" style="display:none"></button>
 			        <form id="logoutBtn" class="btn btn-danger"  method="post" action="/logout" style="display:none">로그아웃</form>
+			        <button type="button" class="btn btn-success" onclick="chartPopup()">랭크차트</button>
 				</li>
 		      </ul>
 		      <div class="d-flex">
@@ -63,6 +54,7 @@
 		  </div>
 		</nav>
 		<!-- 로그인 및 로그아웃 메뉴 영역 END -->
+		
   	
 	  	    <!-- 게시글 영역 -->
  		    <div id="boardTable" style="display:none">
@@ -361,6 +353,30 @@
 		<!-- confirm 레이어 팝업 영역 END-->
 		
 		
+		
+		<!--  그래프 팝업 영역 -->
+		<div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">상위리뷰</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		         <div class="table table-hover" style="width: 450px; height: 200px;">
+				    <!--차트가 그려질 부분-->
+				   <canvas id="myChart"></canvas>
+			     </div>	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!--  그래프 팝업 영역 END -->
+		
+		
     
     
     
@@ -518,6 +534,11 @@ var writePopup = function () {
 		$('input[name=id]').val(loginId); 
 	 }
 	 
+}
+
+//랭크 차트 팝업 띄우는 이벤트
+var chartPopup = function () {
+    $('#chartModal').modal('show');
 }
 
 
@@ -865,39 +886,37 @@ var reloadList = function(data) {
 var context = document
     .getElementById('myChart')
     .getContext('2d');
+    
 var myChart = new Chart(context, {
     type: 'bar', // 차트의 형태
     data: { // 차트에 들어갈 데이터
         labels: [
             //x 축
-            '1','2','3','4','5','6','7'
+            '우영우','더글로리','오징어게임'
         ],
+        
         datasets: [
             { //데이터
-                label: 'test1', //차트 제목
+                label: '평점', //차트 제목
                 fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
-                data: [
-                    21,19,25,20,23,26,25 //x축 label에 대응되는 데이터 값
-                ],
+                
+                //x축 label에 대응되는 데이터 값
+                data: [3,2,5],
+                
                 backgroundColor: [
                     //색상
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
+                    'rgba(255, 206, 86, 0.2)'
+                ]
+            ,
                 borderColor: [
                     //경계선 색상
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255, 206, 86, 1)'
                 ],
-                borderWidth: 1 //경계선 굵기
+                borderWidth: 3 //경계선 굵기
             } ,
         ]
     },
