@@ -22,6 +22,7 @@ import com.board.vo.BoardVo;
 import com.board.vo.GetBoardVo;
 import com.configuration.AdminAuthorize;
 import com.configuration.UserAuthorize;
+import com.util.Crawling;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,6 +58,11 @@ public class BoardController {
         //ModelAndView (데이터와 뷰를 동시에 설정이 가능)
     	//@AuthenticationPrincipal 어노테이션은 현재 로그인 한 유저의 정보를 불러오는 어노테이션(시큐리티에서 제공)
         ModelAndView mv = new ModelAndView();
+        
+        //넷플릭스 타이틀 가져오기
+        Crawling cs = new Crawling();
+        
+        cs.getContent_Netflix_Title();
         
         //메인 페이지는 최근 등록 된 게시글 순으로 보여짐
         insParam.setPage(0);
