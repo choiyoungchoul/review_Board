@@ -62,7 +62,8 @@ public class BoardController {
         //넷플릭스 타이틀 가져오기
         Crawling cs = new Crawling();
         
-        cs.getContent_Netflix_Title();
+        //크롤링 한 현재 넷플릭스 TOP10 목록
+        List<String> itemList = cs.getContent_Netflix_Title();
         
         //메인 페이지는 최근 등록 된 게시글 순으로 보여짐
         insParam.setPage(0);
@@ -76,6 +77,8 @@ public class BoardController {
     	mv.addObject("totalCount", totalCount);  
     	//페이지 정보 가져오기( GetPageInfo(총 페이지 개수, 현재 페이지, 총 게시글 수))
     	mv.addObject("pageInfo", boardService.GetPageInfo(1, 10, Long.valueOf(totalCount))); 
+    	//넷플릭스 TOP10 목록
+    	mv.addObject("itemList", itemList); 
         
         //로그인 상태면 접속 user 정보 화면에 노출
         if(user != null) {
