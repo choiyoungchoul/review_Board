@@ -12,7 +12,7 @@
  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link href="/resources/css/star.css" rel="stylesheet"/>
 	<link href="/resources/css/ckedit.css" rel="stylesheet"/>
-	<script src="/resources/js/ckeditor.js"></script>
+	<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 	<script src="/resources/js/ko.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -145,7 +145,14 @@
                     					        <tr style="line-height:32px;">
 					                                <td style="font-weight: 800">컨텐츠 제목</td>
 					                                <td>
-					                                    <input type="text" name="content_title" class="form-control" value="">
+													   <select class="form-control" id="contents-list">
+														  <option value="">선택해 주세요.</option>
+														  <c:forEach var="list" items="${itemList}">
+														  	 <option value="${list}">${list}</option>
+														  </c:forEach>
+														  <option value="select">직접입력</option>
+													    </select>
+						                                <input id="contents-txt" type="text" name="content_title" class="form-control" value="" style="display:none">
 					                                </td>
 					                            </tr>
 					                            <tr style="line-height:32px;">
@@ -164,7 +171,7 @@
 				                        </table>
 				                    </div>
 									<div>
-										<textarea class="col-auto form-control" style="height:250px" id="contents" name="contents" placeholder="내용"></textarea>
+										<textarea class="col-auto form-control" style="height:250px" id="editor" name="contents" placeholder="내용"></textarea>
 									</div>
 				                </div>
 				            </div>
@@ -389,19 +396,12 @@ var loginId = "";
 var blank_pattern = /^\s+|\s+$/g;
 
 //CKeditor 적용
-//리뷰 작성 창
-ClassicEditor
-.create(document.querySelector('#contents'))
-.catch(error => {
-    console.error(error);
-});
 
-//리뷰 수정 창
 ClassicEditor
-.create(document.querySelector('#updContent'))
-.catch(error => {
-    console.error(error);
-});
+    .create(document.querySelector('#editor'))
+    .catch(error => {
+        console.error(error);
+    });
 
 
 $(document ).ready(function() {
@@ -455,6 +455,20 @@ $(document).on("keypress", "#srchTxt", function(e) {
 		  srchFn();
 	  }
   }
+});
+
+
+//컨텐츠 제목 select 제어 함수
+$("#contents-list").on("change", function() {
+    
+	var domainValue = $("#contents-list").val();
+	
+	if(domainValue == "select"){
+	    $("#contents-txt").show();		
+	}else {
+		$("#contents-txt").hide();
+	}
+	
 });
 
 //별점 선택시 동적 UI 이벤트 함수
@@ -651,13 +665,17 @@ var detailPopup = function (index) {
 var writeSubmit = function() {
 	
       // CKEditor의 내용 가져오기
-      const textVal = CKEDITOR.instances.contents.getData();
+      const asd = ClassicEditor.instances.editor.getData(); // CKEditor 인스턴스 가져오기
+
+      // 에디터 내용 출력 또는 다른 작업 수행
+      console.log('에디터 내용:', asd);
+
+      
 	      
       $("#contents").val(textVal);
 	
 	  var data = $("#writeForm").serializeArray();
 	  
-	  console.log(data);
       
                                        
 }
