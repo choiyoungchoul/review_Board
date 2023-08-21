@@ -12,8 +12,8 @@
  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link href="/resources/css/star.css" rel="stylesheet"/>
 	<link href="/resources/css/ckedit.css" rel="stylesheet"/>
-	<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 	<script src="/resources/js/ko.js"></script>
+	<script src="https://cdn.ckeditor.com/ckeditor5/31.1.0/classic/ckeditor.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -396,12 +396,11 @@ var loginId = "";
 var blank_pattern = /^\s+|\s+$/g;
 
 //CKeditor 적용
-
-ClassicEditor
-    .create(document.querySelector('#editor'))
-    .catch(error => {
-        console.error(error);
-    });
+  ClassicEditor
+    .create( document.querySelector( '#editor' ) )
+    .catch( error => { 
+      console.error( error );
+    } );
 
 
 $(document ).ready(function() {
@@ -665,7 +664,7 @@ var detailPopup = function (index) {
 var writeSubmit = function() {
 	
       // CKEditor의 내용 가져오기
-      const asd = ClassicEditor.instances.editor.getData(); // CKEditor 인스턴스 가져오기
+      const asd = CKEDITOR.instances.editor.getData(); // CKEditor 인스턴스 가져오기
 
       // 에디터 내용 출력 또는 다른 작업 수행
       console.log('에디터 내용:', asd);
