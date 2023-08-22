@@ -11,12 +11,13 @@
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link href="/resources/css/star.css" rel="stylesheet"/>
-	<link href="/resources/css/ckedit.css" rel="stylesheet"/>
-	<script src="/resources/js/ko.js"></script>
-	<script src="https://cdn.ckeditor.com/ckeditor5/31.1.0/classic/ckeditor.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script src="/resources/js/ko.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
+  	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+  	<script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
 </head>
 
 
@@ -171,7 +172,7 @@
 				                        </table>
 				                    </div>
 									<div>
-										<textarea class="col-auto form-control" style="height:250px" id="editor" name="contents" placeholder="내용"></textarea>
+										<textarea class="col-auto form-control" style="height:250px" id="summernote" name="contents" placeholder="내용"></textarea>
 									</div>
 				                </div>
 				            </div>
@@ -395,15 +396,13 @@ var loginId = "";
 //공백 문자확인
 var blank_pattern = /^\s+|\s+$/g;
 
-//CKeditor 적용
-  ClassicEditor
-    .create( document.querySelector( '#editor' ) )
-    .catch( error => { 
-      console.error( error );
-    } );
-
 
 $(document ).ready(function() {
+	
+	  $('#summernote').summernote({
+		  height: 150,
+		  lang: "ko-KR"
+	   });
  	 
 	  //현재 로그인중인 아이디 확인
 	  loginId = "${userName}";
