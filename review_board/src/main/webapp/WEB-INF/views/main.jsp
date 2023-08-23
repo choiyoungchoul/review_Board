@@ -12,7 +12,6 @@
  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link href="/resources/css/star.css" rel="stylesheet"/>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-	<script src="/resources/js/ko.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
@@ -146,7 +145,7 @@
                     					        <tr style="line-height:32px;">
 					                                <td style="font-weight: 800">컨텐츠 제목</td>
 					                                <td>
-													   <select class="form-control" id="contents-list">
+													   <select id="contentsList" class="form-control" id="contents-list">
 														  <option value="">선택해 주세요.</option>
 														  <c:forEach var="list" items="${itemList}">
 														  	 <option value="${list}">${list}</option>
@@ -172,7 +171,7 @@
 				                        </table>
 				                    </div>
 									<div>
-										<textarea class="col-auto form-control" style="height:250px" id="summernote" name="contents" placeholder="내용"></textarea>
+										<textarea class="col-auto form-control" style="height:250px" id="contents" name="contents" placeholder="내용"></textarea>
 									</div>
 				                </div>
 				            </div>
@@ -197,7 +196,6 @@
 		  </div>
 		</div>
 		<!--  게시글 작성 팝업 영역 END -->
-		
 		
 		
 		<!-- 게시글 상세 및 수정,삭제 영역 -->
@@ -384,9 +382,6 @@
 		</div>
 		<!--  그래프 팝업 영역 END -->
 		
-		
-    
-    
     
 <script>
 
@@ -399,11 +394,11 @@ var blank_pattern = /^\s+|\s+$/g;
 
 $(document ).ready(function() {
 	
-	  $('#summernote').summernote({
-		  height: 150,
+	  $('#contents').summernote({
+		  height: 350,
 		  lang: "ko-KR"
 	   });
- 	 
+	  
 	  //현재 로그인중인 아이디 확인
 	  loginId = "${userName}";
 	  var totCnt = "${totalCount}";
@@ -662,20 +657,37 @@ var detailPopup = function (index) {
 //글 작성 aJax
 var writeSubmit = function() {
 	
-      // CKEditor의 내용 가져오기
-      const asd = CKEDITOR.instances.editor.getData(); // CKEditor 인스턴스 가져오기
-
-      // 에디터 내용 출력 또는 다른 작업 수행
-      console.log('에디터 내용:', asd);
-
+	  //select가 직접입력이 아닐 시 input에 셋팅
+	  var selectContents = $("#contentsList").val();
+	  
+	  alert(selectContents);	  
+	  
+	  if(selectContents =! "직접입력") {
+		  $("#contents-txt").val(selectContents);
+	  }
+	  
+	  alert($("#contents-txt").val());
       
-	      
-      $("#contents").val(textVal);
-	
 	  var data = $("#writeForm").serializeArray();
 	  
-      
-                                       
+	  $.ajax({                                      
+		   	url : "/board/writeProcess",                
+		   	type : 'POST',                              
+		   	async : false,                              
+		   	data : data,                                
+		   	dataType: 'json',                           
+		   	success : function(data) {
+			
+		   		if (data.result == 1) {
+		   			openPopup("글작성이 완료 되었습니다.", "Y");	
+		   		}else {
+		   			openPopup("처리중 오류가 발생 했습니다."); 
+		   		}
+		   		
+		   	}, error : function(e) {
+		   		openPopup("서버 오류가 발생 했습니다.");  
+		   	}                                           
+	   }); 
 }
 
 

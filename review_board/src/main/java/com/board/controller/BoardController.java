@@ -181,7 +181,9 @@ public class BoardController {
     	//현재 로그인중인 ID 작성자로 저장
     	boardVo.setWriter(user.getUsername());
     	
-		result = boardService.insContent(boardVo);
+    	log.info("############## {}", boardVo);
+    	
+		//result = boardService.insContent(boardVo);
     	
     	return result;
     }
