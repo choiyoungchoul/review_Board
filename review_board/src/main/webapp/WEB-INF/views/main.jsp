@@ -660,14 +660,10 @@ var writeSubmit = function() {
 	  //select가 직접입력이 아닐 시 input에 셋팅
 	  var selectContents = $("#contentsList").val();
 	  
-	  alert(selectContents);	  
-	  
-	  if(selectContents =! "직접입력") {
+	  if(selectContents != "직접입력") {
 		  $("#contents-txt").val(selectContents);
 	  }
 	  
-	  alert($("#contents-txt").val());
-      
 	  var data = $("#writeForm").serializeArray();
 	  
 	  $.ajax({                                      
