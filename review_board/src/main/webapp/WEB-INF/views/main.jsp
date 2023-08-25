@@ -608,7 +608,7 @@ var detailPopup = function (index) {
      		//상세 input
      		$("#deCntTitle").text(inputData.content_title);
      		$("#deTitle").text(inputData.title);
-     		$("#deContent").text(inputData.contents);
+     		$("#deContent").html(inputData.contents);
      		$("#deWriter").text(inputData.writer);
      		$("#deCount").text(inputData.count);
      		$("#deStar").text(star);
