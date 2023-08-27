@@ -452,9 +452,9 @@ $(document).on("keypress", "#srchTxt", function(e) {
 
 
 //컨텐츠 제목 select 제어 함수
-$("#contents-list").on("change", function() {
+$("#contentsList").on("change", function() {
     
-	var domainValue = $("#contents-list").val();
+	var domainValue = $("#contentsList").val();
 	
 	if(domainValue == "select"){
 	    $("#contents-txt").show();		
@@ -558,7 +558,6 @@ var updatePopup = function (idx) {
 	
 	$("#deUpd").hide();
 	$("#deUpdSub").show();
-	
 	$("#deUpdSub").attr("onclick", "updConfirm("+idx+")");
 	
 }

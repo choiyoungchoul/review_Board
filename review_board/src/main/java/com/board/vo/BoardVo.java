@@ -33,7 +33,7 @@ import lombok.ToString;
 @ToString
 public class BoardVo {
 
-	private String idx;
+	private int idx;
 	private String title;
 	private String contents;
 	private int count;

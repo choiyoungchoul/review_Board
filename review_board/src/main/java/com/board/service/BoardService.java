@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.board.mapper.BoardMapper;
 import com.board.vo.BoardVo;
@@ -81,9 +82,18 @@ public class BoardService {
 	 *
 	 *      </pre>
 	 */
+	@Transactional
 	public int insContent(BoardVo boardVo) {
 		
-		return boardMapper.insContent(boardVo);
+		//결과처리
+		int result = 0;
+		
+		//게시판 테이블 DB저장
+		int insertedIndex = boardMapper.insContent(boardVo);
+		
+		log.info("123123123123 {}",insertedIndex);
+
+		return result; 
 		
 	}
 	

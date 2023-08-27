@@ -35,8 +35,11 @@ public interface BoardMapper {
 	//글 상세 쿼리
 	BoardVo qryDetail (String idx);
 	
-	//글 등록 쿼리
+	//글 등록 쿼리(게시판 테이블)
 	int insContent (BoardVo boardVo);
+	
+	//글 등록 쿼리(넷플릭스 테이블)
+	//int insNetflixContent (BoardVo boardVo);
 	
 	//글 삭제 쿼리
 	int qryDelete (String idx);

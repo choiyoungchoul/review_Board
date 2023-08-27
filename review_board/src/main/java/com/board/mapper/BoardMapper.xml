@@ -12,8 +12,6 @@
 	         	,  TITLE
 	         	,  REGDATE
 	         	,  COUNT
-	         	,  GRADES
-	         	,  CONTENT_TITLE
 	         	,  WRITER
 	         FROM SPABOARD.TB_BOARD
 	         <if test="srchTxt != null and srchTxt != ''">
@@ -55,7 +53,7 @@
     	</select>
     	
     	
-    	<!-- 글 등록 처리 -->
+    	<!-- 글 등록 처리(게시판) -->
   	    <insert id="insContent">
 			INSERT INTO SPABOARD.TB_BOARD (	
 	   				TITLE 
@@ -63,8 +61,6 @@
 	   				, REGDATE
 	   				, UPDDATE
 	   				, COUNT
-	   				, GRADES
-	   				, CONTENT_TITLE
 	   				, WRITER
 	   		)
 	    	VALUES (
@@ -73,9 +69,26 @@
 		           , now()
 		           , now()
 		           , #{count}
-		           , #{grades}
-		           , #{content_title}
 		           , #{writer} )
+	   		<selectKey resultType="Integer" keyProperty="idx" order="BEFORE">
+				SELECT MAX(IDX) FROM SPABOARD.TB_BOARD
+			</selectKey>
+    	</insert>
+    	
+    	
+    	 <!-- 글 등록 처리(넷플릭스) -->
+  	    <insert id="insNetContent">
+			INSERT INTO SPABOARD.TB_NETFLIX (	
+	   				BOARD_NO
+	   				, CONTENTS_TITLE
+	   				, GRADES
+	   				, CONTENTS_URL
+	   		)
+	    	VALUES (
+		           #{boardNo}
+		           , #{contentTitle}
+		           , #{grades}
+		           , #{contentsUrl} )
     	</insert>
     	
     	
