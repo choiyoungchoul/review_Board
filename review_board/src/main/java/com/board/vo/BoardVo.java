@@ -38,7 +38,9 @@ public class BoardVo {
 	private String contents;
 	private int count;
 	private int grades;
-	private String content_title;
+	private String contents_title;
+	private String contents_url;
 	private String writer;
+	private String regdate;
 
 }

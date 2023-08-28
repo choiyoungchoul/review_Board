@@ -66,6 +66,7 @@
 							<th scope="col">별점</th>                                                                                            
 							<th scope="col">컨텐츠 명</th>                                                                                       
 							<th scope="col">작성자</th>                                                                                       
+							<th scope="col">작성일</th>                                                                                       
 						</tr>                                                                                                                    
 					</thead>
 					<tbody id="boardList">                                                                                                                      
@@ -79,8 +80,9 @@
 								      <span>★</span>
 								  </c:forEach>
 								</td>                                                                                                           
-								<td style="color:olive;"><b>${list.content_title}</b></td>                                                                                          
+								<td style="color:olive;"><b>${list.contents_title}</b></td>                                                                                          
 								<td>${list.writer}</td>                                                                                                           
+								<td>${list.regdate}</td>                                                                                                           
 							</tr>                                                                                                                    
 						</c:forEach>                                                                                                                     
 					</tbody>                                                                                                                     

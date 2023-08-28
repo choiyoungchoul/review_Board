@@ -8,22 +8,27 @@
 	    <!-- 게시글 리스트 불러오는 처리 -->
 	    <select id="qrySelectList"  resultType="com.board.vo.BoardVo">
 	         SELECT
-	            IDX 
-	         	,  TITLE
-	         	,  REGDATE
-	         	,  COUNT
-	         	,  WRITER
-	         FROM SPABOARD.TB_BOARD
+	            A.IDX 
+	         	,  A.TITLE
+	         	,  DATE_FORMAT(A.REGDATE, '%Y-%m-%d %H:%i:%s') AS REGDATE
+	         	,  A.COUNT
+	         	,  A.WRITER
+	         	,  B.CONTENTS_TITLE
+	         	,  B.CONTENTS_URL
+	         	,  B.GRADES
+	         FROM SPABOARD.TB_BOARD A
+	         INNER JOIN SPABOARD.TB_NETFLIX B
+	         ON A.IDX = B.BOARD_NO
 	         <if test="srchTxt != null and srchTxt != ''">
                   <choose>
                       <when test='srchType eq "conTit"'>
-                          WHERE CONTENT_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE B.CONTENT_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "revTit"'>
-                          WHERE TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE A.TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "writer"'>
-                          WHERE WRITER LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE A.WRITER LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                   </choose>
              </if>
@@ -70,14 +75,13 @@
 		           , now()
 		           , #{count}
 		           , #{writer} )
-	   		<selectKey resultType="Integer" keyProperty="idx" order="BEFORE">
-				SELECT MAX(IDX) FROM SPABOARD.TB_BOARD
-			</selectKey>
     	</insert>
-    	
     	
     	 <!-- 글 등록 처리(넷플릭스) -->
   	    <insert id="insNetContent">
+ 	        <selectKey resultType="Integer" keyProperty="idx" order="BEFORE">
+				SELECT MAX(IDX) FROM SPABOARD.TB_BOARD
+			</selectKey>
 			INSERT INTO SPABOARD.TB_NETFLIX (	
 	   				BOARD_NO
 	   				, CONTENTS_TITLE
@@ -85,10 +89,10 @@
 	   				, CONTENTS_URL
 	   		)
 	    	VALUES (
-		           #{boardNo}
-		           , #{contentTitle}
+		           #{idx}
+		           , #{content_title}
 		           , #{grades}
-		           , #{contentsUrl} )
+		           , #{contents_url} )
     	</insert>
     	
     	

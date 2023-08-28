@@ -79,22 +79,19 @@ public class BoardService {
 	 *
 	 * 수정일           수정자          수정내용
 	 * ------------ ----------- ---------------------------
-	 *
-	 *      </pre>
 	 */
 	@Transactional
 	public int insContent(BoardVo boardVo) {
 		
-		//결과처리
-		int result = 0;
-		
 		//게시판 테이블 DB저장
-		int insertedIndex = boardMapper.insContent(boardVo);
+		int result = boardMapper.insContent(boardVo);
 		
-		log.info("123123123123 {}",insertedIndex);
+		if(result == 1) {
+			//컨텐츠 테이블에도 컨텐츠명 저장
+			boardMapper.insNetContent(boardVo);
+		}
 
 		return result; 
-		
 	}
 	
 	/**

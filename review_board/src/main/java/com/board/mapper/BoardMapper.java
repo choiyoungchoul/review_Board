@@ -39,7 +39,7 @@ public interface BoardMapper {
 	int insContent (BoardVo boardVo);
 	
 	//글 등록 쿼리(넷플릭스 테이블)
-	//int insNetflixContent (BoardVo boardVo);
+	int insNetContent (BoardVo boardVo);
 	
 	//글 삭제 쿼리
 	int qryDelete (String idx);
