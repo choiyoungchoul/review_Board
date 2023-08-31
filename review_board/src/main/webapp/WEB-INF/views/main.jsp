@@ -154,7 +154,7 @@
 														  </c:forEach>
 														  <option value="select">직접입력</option>
 													    </select>
-						                                <input id="contents-txt" type="text" name="content_title" class="form-control" value="" style="display:none">
+						                                <input id="contents-txt" type="text" name="contents_title" class="form-control" value="" style="display:none">
 					                                </td>
 					                            </tr>
 					                            <tr style="line-height:32px;">
@@ -272,7 +272,7 @@
 	                     				        <tr style="line-height:32px;">
 						                             <td style="font-weight: 800">컨텐츠 제목</td>
 						                             <td>
-						                                 <input id="updCntTitle" type="text" name="content_title" class="form-control" value="">
+						                                 <input id="updCntTitle" type="text" name="contents_title" class="form-control" value="">
 						                             </td>
 						                         </tr>
 						                         <tr style="line-height:32px;">
@@ -607,7 +607,7 @@ var detailPopup = function (index) {
      		
      		//data set
      		//상세 input
-     		$("#deCntTitle").text(inputData.content_title);
+     		$("#deCntTitle").text(inputData.contents_title);
      		$("#deTitle").text(inputData.title);
      		$("#deContent").html(inputData.contents);
      		$("#deWriter").text(inputData.writer);
@@ -615,7 +615,7 @@ var detailPopup = function (index) {
      		$("#deStar").text(star);
      		
      		//수정 input
-     		$("#updCntTitle").val(inputData.content_title);
+     		$("#updCntTitle").val(inputData.contents_title);
      		$("#updTitle").val(inputData.title);
      		$("#updContent").val(inputData.contents);
      		$('input[name="grades"][value="' + inputData.grades + '"]').prop('checked', true);
@@ -673,9 +673,9 @@ var writeSubmit = function() {
 		   	async : false,                              
 		   	data : data,                                
 		   	dataType: 'json',                           
-		   	success : function(data) {
+		   	success : function(result) {
 			
-		   		if (data.result == 1) {
+		   		if (result == 1) {
 		   			openPopup("글작성이 완료 되었습니다.", "Y");	
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
@@ -703,9 +703,9 @@ var updSubmit = function(idx) {
 		   	async : false,                              
 		   	data : data,                                
 		   	dataType: 'json',                           
-		   	success : function(data) {
+		   	success : function(result) {
 			
-		   		if (data.result == 1) {
+		   		if (result == 1) {
 		   			openPopup("수정이 완료 되었습니다.", "Y");	
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
@@ -730,9 +730,9 @@ var delSubmit = function(idx) {
    	async : false,                              
    	data : data,                                
    	dataType: 'json',                           
-   	success : function(data) {
+   	success : function(result) {
 	
-   		if (data.result == 1) {
+   		if (result == 1) {
    			openPopup("삭제가 완료 되었습니다.", "Y");	
    		}else {
    			openPopup("처리중 오류가 발생 했습니다."); 
@@ -864,7 +864,7 @@ var reloadList = function(data) {
             html +=	                  '<span>★</span>';
              	              	   }
             html +=	          '</td>';
-            html +=	          '<td style="color:olive;"><b>'+list[i].content_title+'</b></td>';
+            html +=	          '<td style="color:olive;"><b>'+list[i].contents_title+'</b></td>';
             html +=	          '<td>'+list[i].writer+'</td>';
             html +=	       '</tr>';
 

@@ -90,7 +90,7 @@ public class BoardService {
 			//컨텐츠 테이블에도 컨텐츠명 저장
 			boardMapper.insNetContent(boardVo);
 		}
-
+ 
 		return result; 
 	}
 	

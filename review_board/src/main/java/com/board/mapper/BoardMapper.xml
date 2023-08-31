@@ -22,7 +22,7 @@
 	         <if test="srchTxt != null and srchTxt != ''">
                   <choose>
                       <when test='srchType eq "conTit"'>
-                          WHERE B.CONTENT_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE B.CONTENTS_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "revTit"'>
                           WHERE A.TITLE LIKE CONCAT('%', #{srchTxt}, '%')
@@ -45,7 +45,7 @@
 			<if test="srchTxt != null and srchTxt != ''">
                   <choose>
                       <when test='srchType eq "conTit"'>
-                          WHERE CONTENT_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE CONTENTS_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "revTit"'>
                           WHERE TITLE LIKE CONCAT('%', #{srchTxt}, '%')
@@ -90,7 +90,7 @@
 	   		)
 	    	VALUES (
 		           #{idx}
-		           , #{content_title}
+		           , #{contents_title}
 		           , #{grades}
 		           , #{contents_url} )
     	</insert>
@@ -99,15 +99,18 @@
     	<!-- 글 정보 가져오기 -->
     	<select id="qryDetail" resultType="com.board.vo.BoardVo">
     		SELECT
-    		    IDX
-    			,  TITLE
-    			,  CONTENTS
-		    	,  REGDATE
-	         	,  COUNT
-	         	,  GRADES
-	         	,  CONTENT_TITLE
-	         	,  WRITER
-	         FROM SPABOARD.TB_BOARD
+    		    A.IDX
+    			,  A.TITLE
+    			,  A.CONTENTS
+		    	,  A.REGDATE
+	         	,  A.COUNT
+	         	,  A.WRITER
+	         	,  B.GRADES
+	         	,  B.CONTENTS_TITLE
+	         	,  B.CONTENTS_URL
+	         FROM SPABOARD.TB_BOARD A
+	         INNER JOIN SPABOARD.TB_NETFLIX B
+	         ON A.IDX = B.BOARD_NO
 	         WHERE IDX = #{idx}
     	</select>
     	
@@ -125,7 +128,7 @@
     		SET     TITLE            =  #{title}
 	    		 ,  CONTENTS         =  #{contents}
 	    		 ,  GRADES           =  #{grades}
-	    		 ,  CONTENT_TITLE    =  #{content_title}
+	    		 ,  CONTENTS_TITLE   =  #{contents_title}
     			 ,  UPDDATE          =  now()
     		WHERE IDX = #{idx}
     	</update>
