@@ -111,7 +111,7 @@
 	         FROM SPABOARD.TB_BOARD A
 	         INNER JOIN SPABOARD.TB_NETFLIX B
 	         ON A.IDX = B.BOARD_NO
-	         WHERE IDX = #{idx}
+	         WHERE A.IDX = #{idx}
     	</select>
     	
     	

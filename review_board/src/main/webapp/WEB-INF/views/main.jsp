@@ -147,7 +147,7 @@
                     					        <tr style="line-height:32px;">
 					                                <td style="font-weight: 800">컨텐츠 제목</td>
 					                                <td>
-													   <select id="contentsList" class="form-control" id="contents-list">
+													   <select id="contentsList" class="form-control">
 														  <option value="">선택해 주세요.</option>
 														  <c:forEach var="list" items="${itemList}">
 														  	 <option value="${list}">${list}</option>
@@ -155,6 +155,12 @@
 														  <option value="select">직접입력</option>
 													    </select>
 						                                <input id="contents-txt" type="text" name="contents_title" class="form-control" value="" style="display:none">
+					                                </td>
+					                            </tr>
+					                            <tr>
+					                            	<td style="font-weight: 800">컨텐츠 URL</td>
+					                                <td>
+					                                    <input type="text" name="title" class="form-control" value="">
 					                                </td>
 					                            </tr>
 					                            <tr style="line-height:32px;">
@@ -187,6 +193,10 @@
 									<input type="radio" name="grades" value="1" id="rate5"><label for="rate5">★</label>
 								</fieldset>
 						    </div>
+						    <br>
+						    <div class="card">
+			                  <input type="file" class="form-control-file" id="fileInput">
+			                </div>
 			           </div>
 				  </form>	
 		      </div>
@@ -217,10 +227,16 @@
 				                  <div class="table-responsive">
 				                      <table class="table">
 				                          <tbody>
-	                 					        <tr style="line-height:32px;">
+	                 					      <tr style="line-height:32px;">
 					                              <td style="font-weight: 800">컨텐츠 제목</td>
 					                              <td>
 					                                  <span id="deCntTitle"></span>
+					                              </td>
+					                          </tr>
+					                          <tr style="line-height:32px; display:none;">
+					                              <td style="font-weight: 800">컨텐츠 URL</td>
+					                              <td>
+					                                  <a id="deCntUrl" target="_blank"></a>
 					                              </td>
 					                          </tr>
 					                          <tr style="line-height:32px;">
@@ -273,6 +289,12 @@
 						                             <td style="font-weight: 800">컨텐츠 제목</td>
 						                             <td>
 						                                 <input id="updCntTitle" type="text" name="contents_title" class="form-control" value="">
+						                             </td>
+						                         </tr>
+						                         <tr style="line-height:32px;">
+						                         <td style="font-weight: 800">컨텐츠 URL</td>
+						                             <td>
+						                                 <input id="updCntUrl" type="text" name="contents_title" class="form-control" value="">
 						                             </td>
 						                         </tr>
 						                         <tr style="line-height:32px;">
@@ -456,9 +478,9 @@ $(document).on("keypress", "#srchTxt", function(e) {
 //컨텐츠 제목 select 제어 함수
 $("#contentsList").on("change", function() {
     
-	var domainValue = $("#contentsList").val();
+	var selectValue = $("#contentsList").val();
 	
-	if(domainValue == "select"){
+	if(selectValue == "select"){
 	    $("#contents-txt").show();		
 	}else {
 		$("#contents-txt").hide();
@@ -608,6 +630,17 @@ var detailPopup = function (index) {
      		//data set
      		//상세 input
      		$("#deCntTitle").text(inputData.contents_title);
+     		
+     		//URL은 데이터가 있을때만 노출
+     		if(inputData.contents_url != null) {
+     			$("#deCntUrl").closest("tr").show();
+     			$("#deCntUrl").text(inputData.contents_url);
+     			$("#deCntUrl").attr("href", inputData.contents_url)
+     		}else {
+     			$("#deCntUrl").closest("tr").hide();
+     		}
+     		
+     		
      		$("#deTitle").text(inputData.title);
      		$("#deContent").html(inputData.contents);
      		$("#deWriter").text(inputData.writer);
@@ -616,6 +649,7 @@ var detailPopup = function (index) {
      		
      		//수정 input
      		$("#updCntTitle").val(inputData.contents_title);
+     		$("#updCntUrl").val(inputData.contents_url);
      		$("#updTitle").val(inputData.title);
      		$("#updContent").val(inputData.contents);
      		$('input[name="grades"][value="' + inputData.grades + '"]').prop('checked', true);
@@ -661,13 +695,15 @@ var writeSubmit = function() {
 	  //select가 직접입력이 아닐 시 input에 셋팅
 	  var selectContents = $("#contentsList").val();
 	  
-	  if(selectContents != "직접입력") {
+	  if(selectContents != "select") {
 		  $("#contents-txt").val(selectContents);
 	  }
 	  
 	  var data = $("#writeForm").serializeArray();
 	  
-	  $.ajax({                                      
+	  console.log(data);
+	  
+ 	  $.ajax({                                      
 		   	url : "/board/writeProcess",                
 		   	type : 'POST',                              
 		   	async : false,                              
@@ -684,7 +720,7 @@ var writeSubmit = function() {
 		   	}, error : function(e) {
 		   		openPopup("서버 오류가 발생 했습니다.");  
 		   	}                                           
-	   }); 
+	   });  
 }
 
 

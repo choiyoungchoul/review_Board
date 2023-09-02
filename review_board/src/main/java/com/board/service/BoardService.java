@@ -135,6 +135,8 @@ public class BoardService {
 		
 		response.put("detailContent", detailContent);
 		response.put("writerYn", writerYn);
+		
+		log.info("11111111 {}", response);
 				
 		return response;
 		
