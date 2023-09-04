@@ -193,11 +193,12 @@
 									<input type="radio" name="grades" value="1" id="rate5"><label for="rate5">★</label>
 								</fieldset>
 						    </div>
-						    <br>
-						    <div class="card">
-			                  <input type="file" class="form-control-file" id="fileInput">
-			                </div>
 			           </div>
+				  </form>
+				  <form id="fileUpload">
+		  		      <div class="card">
+	                     <input type="file" class="form-control-file" id="file" name="file">
+	                  </div>
 				  </form>	
 		      </div>
 		      <div class="modal-footer">
@@ -701,18 +702,19 @@ var writeSubmit = function() {
 	  
 	  var data = $("#writeForm").serializeArray();
 	  
-	  console.log(data);
-	  
  	  $.ajax({                                      
 		   	url : "/board/writeProcess",                
 		   	type : 'POST',                              
 		   	async : false,                              
 		   	data : data,                                
-		   	dataType: 'json',                           
+		   	dataType: 'application/json',   
+		   	contentType: false,
+		   	processData: false,
 		   	success : function(result) {
 			
 		   		if (result == 1) {
 		   			openPopup("글작성이 완료 되었습니다.", "Y");	
+		   			
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
 		   		}
@@ -850,6 +852,7 @@ var pageFn = function(pageObj) {
 	       	dataType: 'json',                           
 	       	success : function(data) {
 	       		reloadList(data);
+	       		fileUpload();
 	       	}, error : function(e) {
 	       		openPopup("서버 오류가 발생 했습니다.");
 	       	}                                           
@@ -940,6 +943,26 @@ var reloadList = function(data) {
 	}
 
 };
+
+
+//파일업로드 함수
+var fileUpload = function() {
+	
+	$.ajax({
+        type : 'POST'
+       ,url : '/fileUpload',
+       ,enctype: "multipart/form-data"
+       ,data : formData 
+       ,processData: false
+   	   ,contentType: false
+       ,success : function(result) {
+       },
+       error: function(request, status, error) {
+         
+       }
+	}
+	
+}
 
     	
 

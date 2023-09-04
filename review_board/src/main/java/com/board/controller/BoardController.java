@@ -1,8 +1,11 @@
 package com.board.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.filechooser.FileSystemView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.board.service.BoardService;
@@ -267,6 +271,42 @@ public class BoardController {
     
     
     
+	/**
+	 * 상세 설명
+	 * 파일업로드 aJax 컨트롤러
+	 * @author 최영철
+	 * @since 2023. 8. 1.
+	 * @see
+	 *
+	 *      <pre>
+	 * << 개정이력(Modification Information) >>
+	 *
+	 * 수정일           수정자          수정내용
+	 * ------------ ----------- ---------------------------
+	 *
+	 *      </pre>
+	 */
+    @PostMapping("/fileUpload")
+    @ResponseBody
+    public int qryUpdateProcess(MultipartFile file) {
+    	
+    	int a = 0;
+
+    	log.info("1111111111111111 {}", file.getOriginalFilename());
+    	
+    	return a;
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @GetMapping("/admin")
     @AdminAuthorize
@@ -294,5 +334,9 @@ public class BoardController {
     	
         return mv;
     }
+    
+    
+    
+    
 
 }
