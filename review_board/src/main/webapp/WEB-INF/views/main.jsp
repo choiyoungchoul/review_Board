@@ -126,6 +126,10 @@
        <div style="text-align:right;">
     	   <button type="button" class="btn btn-primary" onclick="writePopup()">리뷰작성</button>
 	   </div>
+	   
+	   <div style="text-align:right;">
+    	   <button type="button" class="btn btn-primary" onclick="fileUpload()">파일업로드 테스트</button>
+	   </div>
 		
 		
 		<!--  게시글 작성 팝업 영역 -->
@@ -160,7 +164,7 @@
 					                            <tr>
 					                            	<td style="font-weight: 800">컨텐츠 URL</td>
 					                                <td>
-					                                    <input type="text" name="title" class="form-control" value="">
+					                                    <input type="text" name="contents" class="form-control" value="">
 					                                </td>
 					                            </tr>
 					                            <tr style="line-height:32px;">
@@ -808,10 +812,14 @@ var srchFn = function() {
 	       	data : JSON.stringify(data),  
 	       	contentType: "application/json; charset=utf-8",
 	       	dataType: 'json',                           
-	       	success : function(data) {
+	       	success : function(data) 
+	       	{
 	       		reloadList(data);
+	       		
 	       	}, error : function(e) {
+	       		
 	       		openPopup("서버 오류가 발생 했습니다.");
+	       		
 	       	}                                           
     });
 };
@@ -851,10 +859,13 @@ var pageFn = function(pageObj) {
 	       	contentType: "application/json; charset=utf-8",
 	       	dataType: 'json',                           
 	       	success : function(data) {
+	       		
 	       		reloadList(data);
-	       		fileUpload();
+	       		
 	       	}, error : function(e) {
+	       		
 	       		openPopup("서버 오류가 발생 했습니다.");
+	       		
 	       	}                                           
       }); 
 
@@ -948,23 +959,25 @@ var reloadList = function(data) {
 //파일업로드 함수
 var fileUpload = function() {
 	
+	var formData = new FormData($("#fileUpload")[0]);
+	
 	$.ajax({
-        type : 'POST'
-       ,url : '/fileUpload',
-       ,enctype: "multipart/form-data"
-       ,data : formData 
-       ,processData: false
-   	   ,contentType: false
-       ,success : function(result) {
-       },
-       error: function(request, status, error) {
-         
-       }
-	}
+        url : '/board/fileUpload' ,
+        type : 'POST' ,
+        enctype: 'multipart/form-data' ,
+        data : formData , 
+        processData: false ,
+   	    contentType: false ,
+        success : function(result) {
+        	
+        	
+       }, error : function(e) {
+      		openPopup("서버 오류가 발생 했습니다.");
+       }   
+	});	
 	
 }
 
-    	
 
 
 var context = document

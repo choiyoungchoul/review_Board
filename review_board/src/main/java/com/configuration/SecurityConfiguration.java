@@ -33,7 +33,7 @@ public class SecurityConfiguration {
         	.csrf().disable().cors().disable()
         	.authorizeRequests(request -> request
                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                .antMatchers("/member/naver","/member/login", "/member/joinProcess","/board/main", "/board/join", "/board/qryBoardList", "/board/detailProcess" ,"/static/**", "/views/**", "/resources/*/**", "/errors/**").permitAll()
+                .antMatchers("/member/naver","/member/login", "/member/joinProcess","/board/main", "/board/join", "/board/qryBoardList", "/board/detailProcess","/board/fileUpload","/static/**", "/views/**", "/resources/*/**", "/errors/**").permitAll()
                 .anyRequest().authenticated()
         )
         .formLogin(login -> login
