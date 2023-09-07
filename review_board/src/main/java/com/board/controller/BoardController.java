@@ -1,6 +1,7 @@
 package com.board.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -275,7 +276,7 @@ public class BoardController {
 	 * 상세 설명
 	 * 파일업로드 aJax 컨트롤러
 	 * @author 최영철
-	 * @since 2023. 8. 1.
+	 * @since 2023. 9. 7.
 	 * @see
 	 *
 	 *      <pre>
@@ -288,11 +289,13 @@ public class BoardController {
 	 */
     @PostMapping("/fileUpload")
     @ResponseBody
-    public int qryUpdateProcess(MultipartFile file) {
+    public int qryUpdateProcess(MultipartFile file) throws IOException {
     	
     	int a = 0;
 
     	log.info("1111111111111111 {}", file.getOriginalFilename());
+    	
+    	boardService.fileUpload(file);
     	
     	return a;
     	

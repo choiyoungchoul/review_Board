@@ -127,10 +127,6 @@
     	   <button type="button" class="btn btn-primary" onclick="writePopup()">리뷰작성</button>
 	   </div>
 	   
-	   <div style="text-align:right;">
-    	   <button type="button" class="btn btn-primary" onclick="fileUpload()">파일업로드 테스트</button>
-	   </div>
-		
 		
 		<!--  게시글 작성 팝업 영역 -->
 		<div class="modal fade" id="weriteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -706,18 +702,22 @@ var writeSubmit = function() {
 	  
 	  var data = $("#writeForm").serializeArray();
 	  
- 	  $.ajax({                                      
+	  
+ 	   	$.ajax({                                      
 		   	url : "/board/writeProcess",                
 		   	type : 'POST',                              
 		   	async : false,                              
 		   	data : data,                                
-		   	dataType: 'application/json',   
-		   	contentType: false,
-		   	processData: false,
+		   	dataType: 'json',   
 		   	success : function(result) {
 			
 		   		if (result == 1) {
-		   			openPopup("글작성이 완료 되었습니다.", "Y");	
+		   			openPopup("글작성이 완료 되었습니다.", "Y");
+		   			
+		   			//첨부된 파일이 있을경우 file 업로드 함수 실행
+		   			if($("#file").val() != '') {
+			   			fileUpload();
+		   			}
 		   			
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
@@ -726,7 +726,7 @@ var writeSubmit = function() {
 		   	}, error : function(e) {
 		   		openPopup("서버 오류가 발생 했습니다.");  
 		   	}                                           
-	   });  
+	   });   
 }
 
 

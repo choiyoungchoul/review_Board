@@ -1,14 +1,18 @@
 package com.board.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.board.mapper.BoardMapper;
 import com.board.vo.BoardVo;
@@ -82,9 +86,11 @@ public class BoardService {
 	 */
 	@Transactional
 	public int insContent(BoardVo boardVo) {
+		log.info("111111111111 {}", boardVo);
 		
 		//게시판 테이블 DB저장
 		int result = boardMapper.insContent(boardVo);
+		
 		
 		if(result == 1) {
 			//컨텐츠 테이블에도 컨텐츠명 저장
@@ -232,5 +238,54 @@ public class BoardService {
 		return pageInfo;
 		
 	}
+	
+	
+	
+	/**
+	 * 상세 설명
+	 * 페이징 처리 서비스
+	 * @author 최영철
+	 * @since 2023. 7. 29.
+	 * @parameter
+	 * currentPage : 현재 페이지
+	 * postsPerPage : 보여줄 게시글 수
+	 * total : 총 페이지 수
+	 * 
+	 *      <pre>
+	 * << 개정이력(Modification Information) >>
+	 *
+	 * 수정일           수정자          수정내용
+	 * ------------ ----------- ---------------------------
+	 *
+	 *      </pre>
+	 */
+    public int fileUpload(MultipartFile file) throws IOException {
+    	
+    	int result = 0;
+
+        // 원래 파일 이름 추출
+        String origName = file.getOriginalFilename();
+
+        // 파일 이름으로 쓸 uuid 생성
+        String uuid = UUID.randomUUID().toString();
+
+        // 확장자 추출(ex : .png)
+        String extension = origName.substring(origName.lastIndexOf("."));
+
+        // uuid와 확장자 결합
+        String savedName = uuid + extension;
+ 
+        // 파일을 불러올 때 사용할 파일 경로
+        String originalFileName = file.getOriginalFilename();
+        File destination = new File("D:\\file" + originalFileName);
+        
+        String savedPath = destination + savedName;
+
+        // 실제로 로컬에 uuid를 파일명으로 저장
+        file.transferTo(new File(savedPath));
+
+        return result;
+        
+    }
 	
 }
