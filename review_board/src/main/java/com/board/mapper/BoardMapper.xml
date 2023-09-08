@@ -59,7 +59,7 @@
     	
     	
     	<!-- 글 등록 처리(게시판) -->
-  	    <insert id="insContent">
+  	    <insert id="insContent" useGeneratedKeys="true" keyProperty="idx">
 			INSERT INTO SPABOARD.TB_BOARD (	
 	   				TITLE 
 	   				, CONTENTS
@@ -79,9 +79,6 @@
     	
     	 <!-- 글 등록 처리(넷플릭스) -->
   	    <insert id="insNetContent">
- 	        <selectKey resultType="Integer" keyProperty="idx" order="BEFORE">
-				SELECT MAX(IDX) FROM SPABOARD.TB_BOARD
-			</selectKey>
 			INSERT INTO SPABOARD.TB_NETFLIX (	
 	   				BOARD_NO
 	   				, CONTENTS_TITLE

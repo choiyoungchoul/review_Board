@@ -85,19 +85,25 @@ public class BoardService {
 	 * ------------ ----------- ---------------------------
 	 */
 	@Transactional
-	public int insContent(BoardVo boardVo) {
-		log.info("111111111111 {}", boardVo);
+	public Map<String, Object> insContent(BoardVo boardVo) {
+		
+		Map<String, Object> response = new HashMap<>();
 		
 		//게시판 테이블 DB저장
 		int result = boardMapper.insContent(boardVo);
 		
-		
 		if(result == 1) {
+			
 			//컨텐츠 테이블에도 컨텐츠명 저장
 			boardMapper.insNetContent(boardVo);
+			
 		}
- 
-		return result; 
+		
+		//방금 등록된 게시글 return 해주기
+		response.put("idx", boardVo.getIdx());
+		response.put("result", result);
+		
+		return response; 
 	}
 	
 	/**
@@ -142,8 +148,6 @@ public class BoardService {
 		response.put("detailContent", detailContent);
 		response.put("writerYn", writerYn);
 		
-		log.info("11111111 {}", response);
-				
 		return response;
 		
 	}

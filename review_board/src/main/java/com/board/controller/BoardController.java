@@ -179,7 +179,7 @@ public class BoardController {
 	 */
     @PostMapping("/writeProcess")
     @ResponseBody
-    public int insWritreContent(@AuthenticationPrincipal UserDetails user, BoardVo boardVo) {
+    public Map<String, Object> insWritreContent(@AuthenticationPrincipal UserDetails user, BoardVo boardVo) {
     	
     	//현재 로그인중인 ID 작성자로 저장
     	boardVo.setWriter(user.getUsername());

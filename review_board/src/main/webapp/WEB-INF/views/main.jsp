@@ -709,14 +709,15 @@ var writeSubmit = function() {
 		   	async : false,                              
 		   	data : data,                                
 		   	dataType: 'json',   
-		   	success : function(result) {
+		   	success : function(data) {
 			
-		   		if (result == 1) {
+		   		if (data.result == 1) {
+		   			
 		   			openPopup("글작성이 완료 되었습니다.", "Y");
 		   			
 		   			//첨부된 파일이 있을경우 file 업로드 함수 실행
 		   			if($("#file").val() != '') {
-			   			fileUpload();
+			   			fileUpload(data.idx);
 		   			}
 		   			
 		   		}else {
@@ -957,9 +958,11 @@ var reloadList = function(data) {
 
 
 //파일업로드 함수
-var fileUpload = function() {
+var fileUpload = function(boardNo) {
 	
 	var formData = new FormData($("#fileUpload")[0]);
+	
+	formData.append("");
 	
 	$.ajax({
         url : '/board/fileUpload' ,
@@ -969,7 +972,6 @@ var fileUpload = function() {
         processData: false ,
    	    contentType: false ,
         success : function(result) {
-        	
         	
        }, error : function(e) {
       		openPopup("서버 오류가 발생 했습니다.");
