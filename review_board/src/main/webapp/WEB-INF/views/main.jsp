@@ -246,7 +246,7 @@
 					                                  <span id="deTitle"></span>
 					                              </td>
 					                          </tr>
-	                     					    <tr style="line-height:32px;">
+	                     					  <tr style="line-height:32px;">
 					                              <td style="font-weight: 800">작성자</td>
 					                              <td>
 					                                  <span id="deWriter"></span>
@@ -266,6 +266,14 @@
 					 								</div>
 					                              </td>
 					                          </tr>
+					                          
+	                     					  <tr style="line-height:32px;">
+					                              <td style="font-weight: 800">첨부파일</td>
+					                              <td>
+					                                  <a id="deFile" href=""></a>
+					                              </td>
+					                          </tr>
+					                          
 				                          </tbody>
 				                      </table>
 				                  </div>
@@ -648,6 +656,9 @@ var detailPopup = function (index) {
      		$("#deCount").text(inputData.count);
      		$("#deStar").text(star);
      		
+     		//파일 정보 있을때만 파일 IDX 셋팅
+     		
+     		
      		//수정 input
      		$("#updCntTitle").val(inputData.contents_title);
      		$("#updCntUrl").val(inputData.contents_url);
@@ -710,15 +721,18 @@ var writeSubmit = function() {
 		   	data : data,                                
 		   	dataType: 'json',   
 		   	success : function(data) {
+		   		
+		   		console.log(data.result);
 			
 		   		if (data.result == 1) {
-		   			
-		   			openPopup("글작성이 완료 되었습니다.", "Y");
 		   			
 		   			//첨부된 파일이 있을경우 file 업로드 함수 실행
 		   			if($("#file").val() != '') {
 			   			fileUpload(data.idx);
+		   			}else {
+			   			openPopup("글작성이 완료 되었습니다.", "Y");
 		   			}
+		   			
 		   			
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
@@ -962,7 +976,10 @@ var fileUpload = function(boardNo) {
 	
 	var formData = new FormData($("#fileUpload")[0]);
 	
-	formData.append("");
+    // boardNo 파라미터를 formData에 추가
+    formData.append("boardNo", boardNo);
+    
+    console.log(formData);    
 	
 	$.ajax({
         url : '/board/fileUpload' ,
@@ -973,8 +990,12 @@ var fileUpload = function(boardNo) {
    	    contentType: false ,
         success : function(result) {
         	
+   			openPopup("글작성이 완료 되었습니다.", "Y");
+        	
        }, error : function(e) {
+    	   
       		openPopup("서버 오류가 발생 했습니다.");
+       
        }   
 	});	
 	

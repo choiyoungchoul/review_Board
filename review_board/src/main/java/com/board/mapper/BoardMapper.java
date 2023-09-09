@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.board.vo.BoardVo;
+import com.board.vo.FileVo;
 import com.board.vo.GetBoardVo;
 
 /**
@@ -49,5 +50,8 @@ public interface BoardMapper {
 	
 	//글 조회 증가 쿼리
 	int qryCountUp(String idx);
+	
+	//파일 업로드
+	int insFileUpload(FileVo fileVo);
 
 }

@@ -77,9 +77,10 @@
 		           , #{writer} )
     	</insert>
     	
+    	
     	 <!-- 글 등록 처리(넷플릭스) -->
   	    <insert id="insNetContent">
-			INSERT INTO SPABOARD.TB_NETFLIX (	
+			INSERT INTO SPABOARD.TB_NETFLIX (		
 	   				BOARD_NO
 	   				, CONTENTS_TITLE
 	   				, GRADES
@@ -95,20 +96,24 @@
     	
     	<!-- 글 정보 가져오기 -->
     	<select id="qryDetail" resultType="com.board.vo.BoardVo">
-    		SELECT
-    		    A.IDX
-    			,  A.TITLE
-    			,  A.CONTENTS
-		    	,  A.REGDATE
-	         	,  A.COUNT
-	         	,  A.WRITER
-	         	,  B.GRADES
-	         	,  B.CONTENTS_TITLE
-	         	,  B.CONTENTS_URL
-	         FROM SPABOARD.TB_BOARD A
-	         INNER JOIN SPABOARD.TB_NETFLIX B
-	         ON A.IDX = B.BOARD_NO
-	         WHERE A.IDX = #{idx}
+			SELECT
+			    A.IDX				
+			    , A.TITLE				
+			    , A.CONTENTS			
+			    , A.REGDATE			
+			    , A.COUNT				
+			    , A.WRITER			
+			    , B.GRADES
+			    , B.CONTENTS_TITLE
+			    , B.CONTENTS_URL
+			    , C.FILE_IDX
+			    , C.ORIGIN_NAME
+			FROM SPABOARD.TB_BOARD A
+			INNER JOIN SPABOARD.TB_NETFLIX B 
+			ON A.IDX = B.BOARD_NO
+			LEFT JOIN SPABOARD.TB_FILE C
+			ON A.IDX = C.BOARD_NO
+			WHERE A.IDX = #{idx}
     	</select>
     	
     	
@@ -130,11 +135,34 @@
     		WHERE IDX = #{idx}
     	</update>
     	
+    	
     	<!-- 글 조회수 올리기 -->
     	<update id="qryCountUp">
     		UPDATE SPABOARD.TB_BOARD
     		SET    COUNT = COUNT + 1
     	    WHERE IDX = #{idx}
     	</update>
+    	
+    	
+    	<!-- 파일정보 저장 -->
+    	<insert id="insFileUpload">
+			INSERT INTO SPABOARD.TB_FILE (	
+	   				BOARD_NO 
+	   				, FILE_NAME
+	   				, ORIGIN_NAME
+	   				, FILE_PATH
+	   				, FILE_TYPE
+	   				, REGDATE
+	   				, UPDDATE
+	   		)
+	    	VALUES (
+		    	   #{board_no} 
+		           , #{file_name}
+		           , #{origin_name}
+		           , #{file_path}
+		           , #{file_type} 
+		           , now()
+		           , now()	)
+    	</insert>
 	
 </mapper>

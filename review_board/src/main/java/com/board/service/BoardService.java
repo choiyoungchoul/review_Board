@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.board.mapper.BoardMapper;
 import com.board.vo.BoardVo;
+import com.board.vo.FileVo;
 import com.board.vo.GetBoardVo;
 import com.util.Paginator;
 
@@ -148,6 +149,7 @@ public class BoardService {
 		response.put("detailContent", detailContent);
 		response.put("writerYn", writerYn);
 		
+		
 		return response;
 		
 	}
@@ -263,8 +265,9 @@ public class BoardService {
 	 *
 	 *      </pre>
 	 */
-    public int fileUpload(MultipartFile file) throws IOException {
+    public int fileUpload(MultipartFile file, int boardNo) throws IOException {
     	
+    	//DB저장 결과값
     	int result = 0;
 
         // 원래 파일 이름 추출
@@ -281,12 +284,24 @@ public class BoardService {
  
         // 파일을 불러올 때 사용할 파일 경로
         String originalFileName = file.getOriginalFilename();
-        File destination = new File("D:\\file" + originalFileName);
+        File destination = new File("D:\\file\\" + originalFileName);
         
         String savedPath = destination + savedName;
 
         // 실제로 로컬에 uuid를 파일명으로 저장
         file.transferTo(new File(savedPath));
+        
+        
+        //업로드한 파일정보 DB에 저장
+        FileVo fileVo = new FileVo();
+        
+        fileVo.setBoard_no(boardNo);
+        fileVo.setFile_name(savedName);
+        fileVo.setFile_path(savedPath);
+        fileVo.setFile_type(extension);
+        fileVo.setOrigin_name(origName);
+        
+        result = boardMapper.insFileUpload(fileVo);
 
         return result;
         

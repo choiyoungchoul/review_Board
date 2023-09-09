@@ -42,5 +42,7 @@ public class BoardVo {
 	private String contents_url;
 	private String writer;
 	private String regdate;
+	private String file_idx;
+	private String origin_name;
 
 }
