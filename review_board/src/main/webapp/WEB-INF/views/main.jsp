@@ -267,7 +267,7 @@
 					                              </td>
 					                          </tr>
 					                          
-	                     					  <tr style="line-height:32px;">
+	                     					  <tr style="line-height:32px; display:none;">
 					                              <td style="font-weight: 800">첨부파일</td>
 					                              <td>
 					                                  <a id="deFile" href=""></a>
@@ -625,6 +625,8 @@ var detailPopup = function (index) {
      	dataType: 'json',                           
      	success : function(data) {
      		
+     		console.log(data);
+     		
      		//게시글 정보
      		var inputData = data.detailContent;
      		
@@ -657,7 +659,13 @@ var detailPopup = function (index) {
      		$("#deStar").text(star);
      		
      		//파일 정보 있을때만 파일 IDX 셋팅
-     		
+     		if(inputData.file_idx != null) {
+     			$("#deFile").closest("tr").show();
+     			$("#deFile").attr("href", "/board/fileDownload?boardNo="+inputData.file_idx);
+     			$("#deFile").text(inputData.origin_name);
+     		}else {
+     			$("#deFile").closest("tr").hide();
+     		}
      		
      		//수정 input
      		$("#updCntTitle").val(inputData.contents_title);

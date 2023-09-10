@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                 			 "/board/qryBoardList", 
                 			 "/board/detailProcess",
                 			 "/board/fileUpload",
+                			 "/board/fileDownload",
                 			 "/board/dd",
                 			 "/static/**", 
                 			 "/views/**", 

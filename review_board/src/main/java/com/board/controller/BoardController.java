@@ -45,6 +45,7 @@ import org.springframework.web.util.UriUtils;
 
 import com.board.service.BoardService;
 import com.board.vo.BoardVo;
+import com.board.vo.FileVo;
 import com.board.vo.GetBoardVo;
 import com.configuration.AdminAuthorize;
 import com.configuration.UserAuthorize;
@@ -339,11 +340,14 @@ public class BoardController {
     // 첨부 파일 다운로드
     @GetMapping("/fileDownload")
     @ResponseBody
-	public void downloadBoardFile(HttpServletResponse response, @RequestParam("boardNo") int boardNo) throws Exception {
+	public void downloadBoardFile(HttpServletResponse response, @RequestParam("boardNo") String fileIdx) throws Exception {
     	
-		String fileName = "ABC.jpg";
+    	//파일정보 가져오기
+    	FileVo fileInfo = boardService.qryFileInfo(fileIdx);
+    	
+		String fileName = fileInfo.getOrigin_name();
 															// D:\\file\\th.jpg9dae8922-088e-49b4-b6d3-a03b5bf986c9.jpg 
-		byte[] files = FileUtils.readFileToByteArray(new File("D:\\file\\ABC.jpgccdaec33-74de-4d24-a7ac-94a470ce9bb7.jpg"));
+		byte[] files = FileUtils.readFileToByteArray(new File(fileInfo.getFile_path()));
 		
 		response.setContentType("application/octet-stream");
 		response.setContentLength(files.length);

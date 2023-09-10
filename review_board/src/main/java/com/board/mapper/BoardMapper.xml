@@ -164,5 +164,15 @@
 		           , now()
 		           , now()	)
     	</insert>
+    	
+    	
+    	<!-- 파일정보 불러오기 -->
+    	<select id="qryFileInfo" resultType="com.board.vo.FileVo">
+    		SELECT 
+    			FILE_PATH
+    			, ORIGIN_NAME 
+    		FROM SPABOARD.TB_FILE
+    		WHERE FILE_IDX = #{fileIdx}
+    	</select>
 	
 </mapper>

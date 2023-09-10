@@ -53,5 +53,8 @@ public interface BoardMapper {
 	
 	//파일 업로드
 	int insFileUpload(FileVo fileVo);
+	
+	//파일 정보 불러오는 쿼리
+	FileVo qryFileInfo(String fileIdx);
 
 }
