@@ -172,10 +172,22 @@ public class BoardService {
 	 *
 	 *      </pre>
 	 */
+	@Transactional
 	public  Map<String, Object> qryDelete(String idx) {
 		
-		//글 상세 정보 가져오기
-		int result = boardMapper.qryDelete(idx);
+		int result = 0;
+		
+		//글 삭제하기
+		int board_Del_Yn = boardMapper.qryDelete(idx);
+		
+		//컨텐츠 정보도 같이 삭제
+		int contents_Del_Yn = boardMapper.qryDelContents(idx);
+		
+		//파일삭제
+		
+		if(board_Del_Yn == 1 && contents_Del_Yn == 1) {
+			result = 1;
+		}
 		
 		Map<String, Object> response = new HashMap<>();
 		

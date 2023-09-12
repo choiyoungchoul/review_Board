@@ -124,6 +124,13 @@
     	</delete>
     	
     	
+    	<!-- 컨텐츠 정보 삭제하기 -->
+    	<delete id="qryDelContents">
+    		DELETE FROM SPABOARD.TB_NETFLIX
+    		WHERE BOARD_NO = #{idx}
+    	</delete>
+    	
+    	
     	<!-- 글 수정하기 -->
     	<update id="qryUpdate">
     		UPDATE SPABOARD.TB_BOARD

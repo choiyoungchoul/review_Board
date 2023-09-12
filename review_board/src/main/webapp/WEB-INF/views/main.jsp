@@ -625,8 +625,6 @@ var detailPopup = function (index) {
      	dataType: 'json',                           
      	success : function(data) {
      		
-     		console.log(data);
-     		
      		//게시글 정보
      		var inputData = data.detailContent;
      		
@@ -729,8 +727,6 @@ var writeSubmit = function() {
 		   	data : data,                                
 		   	dataType: 'json',   
 		   	success : function(data) {
-		   		
-		   		console.log(data.result);
 			
 		   		if (data.result == 1) {
 		   			
@@ -795,9 +791,9 @@ var delSubmit = function(idx) {
    	async : false,                              
    	data : data,                                
    	dataType: 'json',                           
-   	success : function(result) {
+   	success : function(data) {
 	
-   		if (result == 1) {
+   		if (data.result == 1) {
    			openPopup("삭제가 완료 되었습니다.", "Y");	
    		}else {
    			openPopup("처리중 오류가 발생 했습니다."); 
@@ -987,8 +983,6 @@ var fileUpload = function(boardNo) {
     // boardNo 파라미터를 formData에 추가
     formData.append("boardNo", boardNo);
     
-    console.log(formData);    
-	
 	$.ajax({
         url : '/board/fileUpload' ,
         type : 'POST' ,

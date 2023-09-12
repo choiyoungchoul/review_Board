@@ -45,6 +45,9 @@ public interface BoardMapper {
 	//글 삭제 쿼리
 	int qryDelete (String idx);
 	
+	//컨텐츠 정보 삭제 쿼리
+	int qryDelContents (String idx);
+	
 	//글 수정 쿼리
 	int qryUpdate (BoardVo boardVo);
 	
