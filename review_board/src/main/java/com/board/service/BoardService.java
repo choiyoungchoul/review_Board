@@ -175,6 +175,9 @@ public class BoardService {
 	@Transactional
 	public  Map<String, Object> qryDelete(String idx) {
 		
+		//view에 return 해줄 Map
+		Map<String, Object> response = new HashMap<>();
+		
 		int result = 0;
 		
 		//글 삭제하기
@@ -188,8 +191,6 @@ public class BoardService {
 		if(board_Del_Yn == 1 && contents_Del_Yn == 1) {
 			result = 1;
 		}
-		
-		Map<String, Object> response = new HashMap<>();
 		
 		response.put("result", result);
 				
@@ -218,11 +219,21 @@ public class BoardService {
 	 */
 	public  Map<String, Object> qryUpdate(BoardVo boardVo) {
 		
-		//글 상세 정보 가져오기
-		int result = boardMapper.qryUpdate(boardVo);
-		
+		//view에 return 해줄 Map
 		Map<String, Object> response = new HashMap<>();
 		
+		int result = 0;
+		
+		//글 수정하기
+		int board_Upd_Yn = boardMapper.qryUpdate(boardVo);
+		
+		//컨텐츠 정보도 같이 수정
+		int contents_Upd_Yn = boardMapper.qryUpdContents(boardVo);
+		
+		if(board_Upd_Yn == 1 && contents_Upd_Yn == 1) {
+			result = 1;
+		}
+
 		response.put("result", result);
 				
 		return response;
@@ -320,9 +331,6 @@ public class BoardService {
     }
     
     
-    
-    
-    
 	/**
 	 * 상세 설명
 	 * 파일 정보 조회 서비스
@@ -348,5 +356,9 @@ public class BoardService {
         return fileInfo;
         
     }
+    
+    
+    
+    
 	
 }

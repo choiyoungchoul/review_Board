@@ -136,10 +136,19 @@
     		UPDATE SPABOARD.TB_BOARD
     		SET     TITLE            =  #{title}
 	    		 ,  CONTENTS         =  #{contents}
-	    		 ,  GRADES           =  #{grades}
-	    		 ,  CONTENTS_TITLE   =  #{contents_title}
     			 ,  UPDDATE          =  now()
     		WHERE IDX = #{idx}
+    	</update>
+    	
+    	
+    	<!-- 컨텐츠정보 수정하기 -->
+    	<update id="qryUpdContents">
+    		UPDATE SPABOARD.TB_NETFLIX
+    		SET     CONTENTS_TITLE   =  #{contents_title}
+    			 ,  CONTENTS_URL     =  #{contents_url}
+	    		 ,  GRADES           =  #{grades}
+    			 ,  UPDDATE          =  now()
+    		WHERE BOARD_NO = #{idx}
     	</update>
     	
     	

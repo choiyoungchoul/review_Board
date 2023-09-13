@@ -42,14 +42,17 @@ public interface BoardMapper {
 	//글 등록 쿼리(넷플릭스 테이블)
 	int insNetContent (BoardVo boardVo);
 	
+	//글 수정 쿼리(게시판 테이블)
+	int qryUpdate (BoardVo boardVo);
+	
+	//글 수정 쿼리(넷플릭스 테이블)
+	int qryUpdContents (BoardVo boardVo);
+	
 	//글 삭제 쿼리
 	int qryDelete (String idx);
 	
 	//컨텐츠 정보 삭제 쿼리
 	int qryDelContents (String idx);
-	
-	//글 수정 쿼리
-	int qryUpdate (BoardVo boardVo);
 	
 	//글 조회 증가 쿼리
 	int qryCountUp(String idx);
