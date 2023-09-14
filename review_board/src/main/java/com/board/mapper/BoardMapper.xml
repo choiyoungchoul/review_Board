@@ -147,7 +147,6 @@
     		SET     CONTENTS_TITLE   =  #{contents_title}
     			 ,  CONTENTS_URL     =  #{contents_url}
 	    		 ,  GRADES           =  #{grades}
-    			 ,  UPDDATE          =  now()
     		WHERE BOARD_NO = #{idx}
     	</update>
     	

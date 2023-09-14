@@ -230,6 +230,9 @@ public class BoardService {
 		//컨텐츠 정보도 같이 수정
 		int contents_Upd_Yn = boardMapper.qryUpdContents(boardVo);
 		
+		log.info("111111111111 {}", board_Upd_Yn);
+		log.info("111111111111 {}", contents_Upd_Yn);
+		
 		if(board_Upd_Yn == 1 && contents_Upd_Yn == 1) {
 			result = 1;
 		}

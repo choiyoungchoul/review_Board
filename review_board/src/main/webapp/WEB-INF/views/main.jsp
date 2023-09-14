@@ -303,7 +303,7 @@
 						                         <tr style="line-height:32px;">
 						                         <td style="font-weight: 800">컨텐츠 URL</td>
 						                             <td>
-						                                 <input id="updCntUrl" type="text" name="contents_title" class="form-control" value="">
+						                                 <input id="updCntUrl" type="text" name="contents_url" class="form-control" value="">
 						                             </td>
 						                         </tr>
 						                         <tr style="line-height:32px;">
@@ -428,6 +428,11 @@ var blank_pattern = /^\s+|\s+$/g;
 $(document ).ready(function() {
 	
 	  $('#contents').summernote({
+		  height: 350,
+		  lang: "ko-KR"
+	   });
+	  
+	  $('#updContent').summernote({
 		  height: 350,
 		  lang: "ko-KR"
 	   });
@@ -764,9 +769,9 @@ var updSubmit = function(idx) {
 		   	async : false,                              
 		   	data : data,                                
 		   	dataType: 'json',                           
-		   	success : function(result) {
+		   	success : function(data) {
 			
-		   		if (result == 1) {
+		   		if (data.result == 1) {
 		   			openPopup("수정이 완료 되었습니다.", "Y");	
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
