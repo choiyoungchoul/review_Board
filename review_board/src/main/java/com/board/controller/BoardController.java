@@ -294,11 +294,6 @@ public class BoardController {
     
     
     
-    
-    
-    
-    
-    
 	/**
 	 * 상세 설명
 	 * 파일업로드 aJax 컨트롤러

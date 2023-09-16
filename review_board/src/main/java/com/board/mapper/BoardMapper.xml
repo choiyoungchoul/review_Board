@@ -180,6 +180,18 @@
 		           , now()	)
     	</insert>
     	
+    	<!-- 파일정보 변경 -->
+    	<update id="">
+    		UPDATE SPABOARD.TB_FILE 
+    		SET BOARD_NO 	  = {board_no}
+	   			, FILE_NAME   = #{file_name}
+	   			, ORIGIN_NAME = #{origin_name}
+	   			, FILE_PATH   = #{file_path}
+	   			, FILE_TYPE   = #{file_type}
+	   			, UPDDATE     = now()
+    		WHERE IDX = #{idx}
+    	</update>
+    	
     	
     	<!-- 파일정보 불러오기 -->
     	<select id="qryFileInfo" resultType="com.board.vo.FileVo">
@@ -189,5 +201,13 @@
     		FROM SPABOARD.TB_FILE
     		WHERE FILE_IDX = #{fileIdx}
     	</select>
+    	
+    	
+    	<!-- 파일유무 확인 -->
+	    <select id="qryCheckFile" resultType="boolean">
+	        SELECT IDX
+	        FROM SPABOARD.TB_FILE
+	        WHERE BOARD_NO = #{boardNo}
+	    </select>
 	
 </mapper>

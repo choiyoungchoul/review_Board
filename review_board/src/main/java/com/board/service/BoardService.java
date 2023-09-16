@@ -327,7 +327,25 @@ public class BoardService {
         fileVo.setFile_type(extension);
         fileVo.setOrigin_name(origName);
         
-        result = boardMapper.insFileUpload(fileVo);
+        //등록된 파일 조회
+        int fileIdx = boardMapper.qryCheckFile(boardNo);
+        
+        log.info("111111111111 {}", fileIdx);
+        
+        
+        //이미 저장된 파일이 있을 경우 update 처리
+        if(fileIdx > 0) {
+        	
+        	//update 할 file index
+        	fileVo.setIdx(fileIdx);
+        	
+        	result = boardMapper.updFileUpload(fileVo);
+        	
+    	//첫 파일저장이면 DB에 insert 처리
+        }else {
+        	result = boardMapper.insFileUpload(fileVo);
+        }
+        
 
         return result;
         

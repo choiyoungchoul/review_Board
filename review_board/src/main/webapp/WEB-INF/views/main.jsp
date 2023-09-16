@@ -179,7 +179,7 @@
 				                        </table>
 				                    </div>
 									<div>
-										<textarea class="col-auto form-control" style="height:250px" id="contents" name="contents" placeholder="내용"></textarea>
+										<textarea class="col-auto form-control" id="insContent" name="contents" placeholder="내용" style="height:250px"></textarea>
 									</div>
 				                </div>
 				            </div>
@@ -195,9 +195,9 @@
 						    </div>
 			           </div>
 				  </form>
-				  <form id="fileUpload">
+				  <form id="insFileUpload">
 		  		      <div class="card">
-	                     <input type="file" class="form-control-file" id="file" name="file">
+	                     <input type="file" class="form-control-file" id="insFile" name="file">
 	                  </div>
 				  </form>	
 		      </div>
@@ -287,7 +287,7 @@
 			      <!-- 상세 레이어 -->
 			      
 			     <!-- 수정 레이어 -->
-	    		 <form class="mb-3" id="updateModal" method="post" style="display:none">
+	    		 <form class="modal-body" id="updateModal" method="post" style="display:none">
 				      <div class="col-sm-12 pt-3">
 					     <div class="card">
 					         <div class="card-body">
@@ -316,7 +316,7 @@
 					                     </table>
 					                 </div>
 						 			<div>
-						 				<textarea class="col-auto form-control" style="height:250px" id="updContent" name="contents" placeholder="내용"></textarea>
+						 				<textarea class="col-auto form-control" id="updContent" name="contents" placeholder="내용" style="height:250px"></textarea>
 						 			</div>
 					             </div>
 					         </div>
@@ -333,6 +333,12 @@
 							  <input id="updIdx" type="hidden" name="idx" value="" />
 				          </div>
 					  </form>
+        			  <form id="updFileUpload" class="modal-body" style="display:none">
+		  		          <div class="card">
+	                         <input type="file" class="form-control-file" id="updFile" name="file">
+	                      </div>
+			      	  </form>	
+
 			       	  <!-- 수정 레이어 -->
 		       	  
 		      <div class="modal-footer">
@@ -427,7 +433,7 @@ var blank_pattern = /^\s+|\s+$/g;
 
 $(document ).ready(function() {
 	
-	  $('#contents').summernote({
+	  $('#insContent').summernote({
 		  height: 350,
 		  lang: "ko-KR"
 	   });
@@ -674,7 +680,7 @@ var detailPopup = function (index) {
      		$("#updCntTitle").val(inputData.contents_title);
      		$("#updCntUrl").val(inputData.contents_url);
      		$("#updTitle").val(inputData.title);
-     		$("#updContent").val(inputData.contents);
+     		$('#updContent').summernote('code', inputData.contents);
      		$('input[name="grades"][value="' + inputData.grades + '"]').prop('checked', true);
      		
      		
@@ -736,8 +742,8 @@ var writeSubmit = function() {
 		   		if (data.result == 1) {
 		   			
 		   			//첨부된 파일이 있을경우 file 업로드 함수 실행
-		   			if($("#file").val() != '') {
-			   			fileUpload(data.idx);
+		   			if($("#insFile").val() != '') {
+			   			fileUpload(data.idx, 'w');
 		   			}else {
 			   			openPopup("글작성이 완료 되었습니다.", "Y");
 		   			}
@@ -981,9 +987,17 @@ var reloadList = function(data) {
 
 
 //파일업로드 함수
-var fileUpload = function(boardNo) {
+var fileUpload = function(boardNo, type) {
 	
-	var formData = new FormData($("#fileUpload")[0]);
+	var formData = "";
+	
+	//type의 경우 현재 호출 한 프로세스가, 글작성일 경우 w , 글 수정일 경우 u
+	if(type == w) {
+		formData = new FormData($("#insFileUpload")[0]);
+	}else {
+		formData = new FormData($("#updFileUpload")[0]);
+	}
+	
 	
     // boardNo 파라미터를 formData에 추가
     formData.append("boardNo", boardNo);

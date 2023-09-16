@@ -57,10 +57,16 @@ public interface BoardMapper {
 	//글 조회 증가 쿼리
 	int qryCountUp(String idx);
 	
-	//파일 업로드
+	//파일 업로드(새로 저장)
 	int insFileUpload(FileVo fileVo);
+	
+	//파일 업로드(파일 수정)
+	int updFileUpload(FileVo fileVo);
 	
 	//파일 정보 불러오는 쿼리
 	FileVo qryFileInfo(String fileIdx);
+	
+	//게시글의 파일 유무 체크 쿼리
+	int qryCheckFile(int boardNo);
 
 }
