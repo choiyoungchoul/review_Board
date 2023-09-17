@@ -181,15 +181,15 @@
     	</insert>
     	
     	<!-- 파일정보 변경 -->
-    	<update id="">
+    	<update id="updFileUpload">
     		UPDATE SPABOARD.TB_FILE 
-    		SET BOARD_NO 	  = {board_no}
+    		SET BOARD_NO 	  = #{board_no}
 	   			, FILE_NAME   = #{file_name}
 	   			, ORIGIN_NAME = #{origin_name}
 	   			, FILE_PATH   = #{file_path}
 	   			, FILE_TYPE   = #{file_type}
 	   			, UPDDATE     = now()
-    		WHERE IDX = #{idx}
+    		WHERE FILE_IDX = #{idx}
     	</update>
     	
     	
@@ -204,8 +204,8 @@
     	
     	
     	<!-- 파일유무 확인 -->
-	    <select id="qryCheckFile" resultType="boolean">
-	        SELECT IDX
+	    <select id="qryCheckFile" resultType="integer">
+	        SELECT FILE_IDX
 	        FROM SPABOARD.TB_FILE
 	        WHERE BOARD_NO = #{boardNo}
 	    </select>

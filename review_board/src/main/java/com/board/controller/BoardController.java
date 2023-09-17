@@ -341,6 +341,8 @@ public class BoardController {
     	//파일정보 가져오기
     	FileVo fileInfo = boardService.qryFileInfo(fileIdx);
     	
+    	log.info("???????????????123123");
+    	
 		String fileName = fileInfo.getOrigin_name();
 		
 		byte[] files = FileUtils.readFileToByteArray(new File(fileInfo.getFile_path()));

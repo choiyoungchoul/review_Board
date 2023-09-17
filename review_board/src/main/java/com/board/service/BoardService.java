@@ -2,16 +2,21 @@ package com.board.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.board.mapper.BoardMapper;
@@ -229,9 +234,7 @@ public class BoardService {
 		
 		//컨텐츠 정보도 같이 수정
 		int contents_Upd_Yn = boardMapper.qryUpdContents(boardVo);
-		
-		log.info("111111111111 {}", board_Upd_Yn);
-		log.info("111111111111 {}", contents_Upd_Yn);
+
 		
 		if(board_Upd_Yn == 1 && contents_Upd_Yn == 1) {
 			result = 1;
@@ -332,12 +335,15 @@ public class BoardService {
         
         log.info("111111111111 {}", fileIdx);
         
-        
         //이미 저장된 파일이 있을 경우 update 처리
         if(fileIdx > 0) {
         	
         	//update 할 file index
         	fileVo.setIdx(fileIdx);
+        	
+        	//물리적인 경로에 있는 기존 파일 삭제
+        	File fileToDelete = new File( fileVo.getFile_path());
+        	fileToDelete.delete();
         	
         	result = boardMapper.updFileUpload(fileVo);
         	
@@ -375,6 +381,57 @@ public class BoardService {
     	FileVo fileInfo = boardMapper.qryFileInfo(fileIdx);
 
         return fileInfo;
+        
+    }
+    
+    
+    
+	/**
+	 * 상세 설명
+	 * 파일 정보 조회 서비스
+	 * @author 최영철
+	 * @since 2023. 9. 8.
+	 * @parameter
+	 * Board_no : 게시글 번호
+	 * postsPerPage : 보여줄 게시글 수
+	 * total : 총 페이지 수
+	 * 
+	 *      <pre>
+	 * << 개정이력(Modification Information) >>
+	 *
+	 * 수정일           수정자          수정내용
+	 * ------------ ----------- ---------------------------
+	 *
+	 *      </pre>
+	 */
+    @PostMapping("/removeFile")
+    public ResponseEntity<Boolean> removeFile(String fileName){
+
+        String srcFileName = null;
+        
+        String uploadPath = "";
+        
+        File file;
+
+        try{
+        	
+        	file = new File(fileName);
+        	
+            srcFileName = URLDecoder.decode(fileName,"UTF-8");
+            //UUID가 포함된 파일이름을 디코딩해줍니다.
+
+
+            File thumbnail = new File(file.getParent(),"s_"+file.getName());
+            //getParent() - 현재 File 객체가 나태내는 파일의 디렉토리의 부모 디렉토리의 이름 을 String으로 리턴해준다.
+            boolean result = thumbnail.delete();
+            return new ResponseEntity<>(result,HttpStatus.OK);
+            
+        }catch (UnsupportedEncodingException e){
+        	
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+            
+        }
         
     }
     

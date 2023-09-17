@@ -601,6 +601,7 @@ var updatePopup = function (idx) {
 	$("#updateModal").show();
 	
 	$("#deUpd").hide();
+	$("#updFileUpload").show();
 	$("#deUpdSub").show();
 	$("#deUpdSub").attr("onclick", "updConfirm("+idx+")");
 	
@@ -709,6 +710,7 @@ var detailPopup = function (index) {
      		$("#updateModal").hide();
      		$("#detailModal").show();
      		$("#deUpdSub").hide();
+     		$("#updFileUpload").hide();
      		
      		
      	}, error : function(e) {
@@ -748,7 +750,6 @@ var writeSubmit = function() {
 			   			openPopup("글작성이 완료 되었습니다.", "Y");
 		   			}
 		   			
-		   			
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
 		   		}
@@ -776,9 +777,20 @@ var updSubmit = function(idx) {
 		   	data : data,                                
 		   	dataType: 'json',                           
 		   	success : function(data) {
-			
+				
 		   		if (data.result == 1) {
-		   			openPopup("수정이 완료 되었습니다.", "Y");	
+		   			
+		   			//첨부된 파일이 있을경우 file 업로드 함수 실행
+		   			if($("#updFile").val() != '') {
+		   				
+		   				fileUpload($("#updIdx").val(), 'u');
+		   				
+		   			}else {
+		   				
+			   			openPopup("수정이 완료 되었습니다.", "Y");	
+			   			
+		   			}
+		   			
 		   		}else {
 		   			openPopup("처리중 오류가 발생 했습니다."); 
 		   		}
@@ -992,11 +1004,13 @@ var fileUpload = function(boardNo, type) {
 	var formData = "";
 	
 	//type의 경우 현재 호출 한 프로세스가, 글작성일 경우 w , 글 수정일 경우 u
-	if(type == w) {
+	if(type == 'w') {
 		formData = new FormData($("#insFileUpload")[0]);
 	}else {
 		formData = new FormData($("#updFileUpload")[0]);
 	}
+	
+	console.log();
 	
 	
     // boardNo 파라미터를 formData에 추가
@@ -1011,7 +1025,11 @@ var fileUpload = function(boardNo, type) {
    	    contentType: false ,
         success : function(result) {
         	
-   			openPopup("글작성이 완료 되었습니다.", "Y");
+        	if(type == 'w') {
+	   			openPopup("글작성이 완료 되었습니다.", "Y");
+        	}else {
+        		openPopup("수정이 완료 되었습니다.", "Y");
+        	}
         	
        }, error : function(e) {
     	   
