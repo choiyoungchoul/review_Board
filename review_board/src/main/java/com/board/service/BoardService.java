@@ -331,18 +331,17 @@ public class BoardService {
         fileVo.setOrigin_name(origName);
         
         //등록된 파일 조회
-        int fileIdx = boardMapper.qryCheckFile(boardNo);
+        FileVo fileCheckInfo = boardMapper.qryCheckFile(boardNo);
         
-        log.info("111111111111 {}", fileIdx);
         
         //이미 저장된 파일이 있을 경우 update 처리
-        if(fileIdx > 0) {
+        if(fileCheckInfo.getFile_idx() > 0) {
         	
         	//update 할 file index
-        	fileVo.setIdx(fileIdx);
+        	fileVo.setFile_idx(fileCheckInfo.getFile_idx());
         	
         	//물리적인 경로에 있는 기존 파일 삭제
-        	File fileToDelete = new File( fileVo.getFile_path());
+        	File fileToDelete = new File(fileCheckInfo.getFile_path());
         	fileToDelete.delete();
         	
         	result = boardMapper.updFileUpload(fileVo);

@@ -42,7 +42,7 @@ public class SecurityConfiguration {
                 			 "/board/detailProcess",
                 			 "/board/fileUpload",
                 			 "/board/fileDownload",
-                			 "/board/dd",
+                			 "/board/removeFile",
                 			 "/static/**", 
                 			 "/views/**", 
                 			 "/resources/*/**", 

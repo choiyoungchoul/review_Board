@@ -333,12 +333,22 @@
 							  <input id="updIdx" type="hidden" name="idx" value="" />
 				          </div>
 					  </form>
+					  <div>
+	  					  <table id="inputFile" class="table" style="display:none">
+		                      <tbody>
+			                    <tr>
+								     <td>
+								         <span id="fileName" ></span>		<button id="fileDelInput" class="btn-danger" onclick="">삭제</button>
+								     </td>
+								 </tr>
+							 </tbody>
+					  	</table>	
+					  </div>
         			  <form id="updFileUpload" class="modal-body" style="display:none">
 		  		          <div class="card">
 	                         <input type="file" class="form-control-file" id="updFile" name="file">
 	                      </div>
 			      	  </form>	
-
 			       	  <!-- 수정 레이어 -->
 		       	  
 		      <div class="modal-footer">
@@ -536,6 +546,7 @@ $('.stars .fa').click(function() {
 });
 
 
+
 //alert 팝업 제어 함수
 var openPopup = function(text, reload) {
 	
@@ -550,15 +561,24 @@ var openPopup = function(text, reload) {
 }
 
 
-//confirm 함수(수정,삭제 시 필요) type 1. del(삭제 처리) , 2. upd(수정 처리)
+//confirm 함수(수정,삭제 시 필요) type 1. del(삭제 처리) , 2. upd(수정 처리) 3. Fdel(파일 삭제 처리)
 var openConfPopup = function(text, type, idx) {
 	
     $('#confTxt p').text(text);
     
+    
     if(type == "upd") {
-    	$('#confirmBtn').attr("onclick", "updSubmit("+idx+")");
+    	
+    	$('#confirmBtn').attr("onclick", "updSubmit("+idx+")"); //수정처리
+    
+    }else if(type == "del") {
+    	
+	    $('#confirmBtn').attr("onclick", "delSubmit("+idx+")"); //삭제처리	
+	  
     }else {
-	    $('#confirmBtn').attr("onclick", "delSubmit("+idx+")");
+    	
+    	$('#confirmBtn').attr("onclick", "delFileSubmit("+idx+")"); //파일삭제 처리  
+    	
     }
     
     $('#confirmModal').modal('show');
@@ -623,6 +643,13 @@ var delConfirm = function (idx) {
 	
 }
 
+// 파일 삭제 confirm 이벤트
+var delFileConfirm = function (file_idx) {
+	
+	openConfPopup("파일을 삭제 하시겠습니까?", "Fdel", file_idx);
+	
+}
+
 //글상세 내용 가져오는 aJax
 var detailPopup = function (index) {
 	
@@ -670,11 +697,22 @@ var detailPopup = function (index) {
      		
      		//파일 정보 있을때만 파일 IDX 셋팅
      		if(inputData.file_idx != null) {
+     			
      			$("#deFile").closest("tr").show();
      			$("#deFile").attr("href", "/board/fileDownload?boardNo="+inputData.file_idx);
      			$("#deFile").text(inputData.origin_name);
+     			
+     			//수정 팝업에도 셋팅
+     			$("#inputFile").show();
+     			$("#fileName").text(inputData.origin_name);
+     			$("#fileDelInput").attr("onclick", "delFileConfirm("+inputData.file_idx+")");
+     			
+     			
      		}else {
+     			
      			$("#deFile").closest("tr").hide();
+     			$("#inputFile").hide();
+     			
      		}
      		
      		//수정 input
@@ -1037,6 +1075,12 @@ var fileUpload = function(boardNo, type) {
        
        }   
 	});	
+	
+}
+
+
+//파일 삭제 함수
+var delFileSubmit = function(file_idx) {
 	
 }
 

@@ -189,7 +189,7 @@
 	   			, FILE_PATH   = #{file_path}
 	   			, FILE_TYPE   = #{file_type}
 	   			, UPDDATE     = now()
-    		WHERE FILE_IDX = #{idx}
+    		WHERE FILE_IDX = #{file_idx}
     	</update>
     	
     	
@@ -204,8 +204,9 @@
     	
     	
     	<!-- 파일유무 확인 -->
-	    <select id="qryCheckFile" resultType="integer">
-	        SELECT FILE_IDX
+	    <select id="qryCheckFile" resultType="com.board.vo.FileVo">
+	        SELECT   FILE_IDX
+	        	   , FILE_PATH
 	        FROM SPABOARD.TB_FILE
 	        WHERE BOARD_NO = #{boardNo}
 	    </select>

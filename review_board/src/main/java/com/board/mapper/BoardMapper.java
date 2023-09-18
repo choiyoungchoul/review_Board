@@ -67,6 +67,6 @@ public interface BoardMapper {
 	FileVo qryFileInfo(String fileIdx);
 	
 	//게시글의 파일 유무 체크 쿼리
-	int qryCheckFile(int boardNo);
+	FileVo qryCheckFile(int boardNo);
 
 }
