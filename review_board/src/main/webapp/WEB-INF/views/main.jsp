@@ -333,22 +333,14 @@
 							  <input id="updIdx" type="hidden" name="idx" value="" />
 				          </div>
 					  </form>
-					  <div>
-	  					  <table id="inputFile" class="table" style="display:none">
-		                      <tbody>
-			                    <tr>
-								     <td>
-								         <span id="fileName" ></span>		<button id="fileDelInput" class="btn-danger" onclick="">삭제</button>
-								     </td>
-								 </tr>
-							 </tbody>
-					  	</table>	
+		       	  	  <div id="inputFile" class="card-body" style="display:none">
+						  <span id="fileName" ></span>				<button id="fileDelBtn" class="btn-danger" onclick="">삭제</button>
 					  </div>
         			  <form id="updFileUpload" class="modal-body" style="display:none">
 		  		          <div class="card">
 	                         <input type="file" class="form-control-file" id="updFile" name="file">
 	                      </div>
-			      	  </form>	
+			      	  </form>
 			       	  <!-- 수정 레이어 -->
 		       	  
 		      <div class="modal-footer">
@@ -566,7 +558,6 @@ var openConfPopup = function(text, type, idx) {
 	
     $('#confTxt p').text(text);
     
-    
     if(type == "upd") {
     	
     	$('#confirmBtn').attr("onclick", "updSubmit("+idx+")"); //수정처리
@@ -615,13 +606,20 @@ var chartPopup = function () {
 
 
 //수정 팝업 이벤트
-var updatePopup = function (idx) {
+var updatePopup = function (idx, fileIdx) {
 	
 	$("#detailModal").hide();
 	$("#updateModal").show();
 	
 	$("#deUpd").hide();
 	$("#updFileUpload").show();
+	
+	if(fileIdx != '' && fileIdx != null) {
+		$("#inputFile").show();
+		$("#fileDelBtn").show();
+	}
+	
+	
 	$("#deUpdSub").show();
 	$("#deUpdSub").attr("onclick", "updConfirm("+idx+")");
 	
@@ -681,11 +679,15 @@ var detailPopup = function (index) {
      		
      		//URL은 데이터가 있을때만 노출
      		if(inputData.contents_url != null) {
+     			
      			$("#deCntUrl").closest("tr").show();
      			$("#deCntUrl").text(inputData.contents_url);
-     			$("#deCntUrl").attr("href", inputData.contents_url)
+     			$("#deCntUrl").attr("href", inputData.contents_url);
+     			
      		}else {
+     			
      			$("#deCntUrl").closest("tr").hide();
+     			
      		}
      		
      		
@@ -703,15 +705,13 @@ var detailPopup = function (index) {
      			$("#deFile").text(inputData.origin_name);
      			
      			//수정 팝업에도 셋팅
-     			$("#inputFile").show();
      			$("#fileName").text(inputData.origin_name);
-     			$("#fileDelInput").attr("onclick", "delFileConfirm("+inputData.file_idx+")");
+     			$("#fileDelBtn").attr("onclick", "delFileConfirm("+inputData.file_idx+")");
      			
      			
      		}else {
      			
      			$("#deFile").closest("tr").hide();
-     			$("#inputFile").hide();
      			
      		}
      		
@@ -733,7 +733,7 @@ var detailPopup = function (index) {
      			
          		//게시글 번호 data-value에 set
          		$("#deDel").attr("onclick", "delConfirm("+inputData.idx+")");
-         		$("#deUpd").attr("onclick", "updatePopup("+inputData.idx+")");
+         		$("#deUpd").attr("onclick", "updatePopup("+inputData.idx+", "+inputData.file_idx+")");
      			
      		}else {
      			
@@ -745,10 +745,14 @@ var detailPopup = function (index) {
 	
      		//modal 띄우기
      		$('#detailModalBody').modal('show');
+     		
+     		//그밖의 보임/숨김 제어
      		$("#updateModal").hide();
      		$("#detailModal").show();
      		$("#deUpdSub").hide();
      		$("#updFileUpload").hide();
+   			$("#inputFile").hide();
+   			$("#fileDelBtn").hide();
      		
      		
      	}, error : function(e) {
