@@ -1052,8 +1052,6 @@ var fileUpload = function(boardNo, type) {
 		formData = new FormData($("#updFileUpload")[0]);
 	}
 	
-	console.log();
-	
 	
     // boardNo 파라미터를 formData에 추가
     formData.append("boardNo", boardNo);
@@ -1085,6 +1083,27 @@ var fileUpload = function(boardNo, type) {
 
 //파일 삭제 함수
 var delFileSubmit = function(file_idx) {
+	
+    var fileIdx = file_idx;
+ 
+    $.ajax({                                     
+       	url : "/board/removeFile",                
+       	type : 'POST',                              
+       	async : false,                              
+       	data : fileIdx,  
+       	contentType: "application/json; charset=utf-8",
+       	dataType: 'json',                           
+       	success : function(data) {
+       		
+			alert("파일삭제 완료");
+       		
+       	}, error : function(e) {
+       		
+       		openPopup("서버 오류가 발생 했습니다.");
+       		
+       	}                                           
+  }); 
+
 	
 }
 
