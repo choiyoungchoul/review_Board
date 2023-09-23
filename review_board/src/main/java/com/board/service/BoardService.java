@@ -191,10 +191,39 @@ public class BoardService {
 		//컨텐츠 정보도 같이 삭제
 		int contents_Del_Yn = boardMapper.qryDelContents(idx);
 		
-		//파일삭제
+		//파일정보
+		int file_Del_Yn = 0;
 		
-		if(board_Del_Yn == 1 && contents_Del_Yn == 1) {
+		//파일삭제
+		//등록된 파일 조회
+        FileVo fileCheckInfo = boardMapper.qryCheckFile(Integer.parseInt(idx));
+        
+        //등록된 파일이 존재 할 경우
+        if(fileCheckInfo != null) {
+        	
+        	String fileIdx = String.valueOf(fileCheckInfo.getFile_idx());
+        	String filePath = fileCheckInfo.getFile_path();
+        	
+    		//물리적 경로에 있는 파일 삭제
+        	File fileToDelete = new File(filePath);
+        	
+        	fileToDelete.delete();
+        	
+    		//DB에서도 파일 삭제
+        	file_Del_Yn = boardMapper.delFileDb(fileIdx);
+        	
+        }else {
+        	
+        	file_Del_Yn = 1;
+        	
+        }
+        
+        
+		//모든 처리가 정상일 때 화면에 정상 code 전송
+		if(board_Del_Yn == 1 && contents_Del_Yn == 1 && file_Del_Yn == 1) {
+			
 			result = 1;
+			
 		}
 		
 		response.put("result", result);
