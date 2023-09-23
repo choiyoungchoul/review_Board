@@ -1084,18 +1084,20 @@ var fileUpload = function(boardNo, type) {
 //파일 삭제 함수
 var delFileSubmit = function(file_idx) {
 	
-    var fileIdx = file_idx;
+    var data = { fileIdx : file_idx };
+    
  
     $.ajax({                                     
        	url : "/board/removeFile",                
        	type : 'POST',                              
        	async : false,                              
-       	data : fileIdx,  
-       	contentType: "application/json; charset=utf-8",
-       	dataType: 'json',                           
+       	data : data,  
+       	contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+       	dataType: 'text',                           
        	success : function(data) {
        		
-			alert("파일삭제 완료");
+       		openPopup("파일삭제 완료");
+       		$("#inputFile").hide();
        		
        	}, error : function(e) {
        		

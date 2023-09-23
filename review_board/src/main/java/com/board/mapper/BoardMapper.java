@@ -68,5 +68,8 @@ public interface BoardMapper {
 	
 	//게시글의 파일 유무 체크 쿼리
 	FileVo qryCheckFile(int boardNo);
+	
+	//파일 삭제(DB)
+	int delFileDb (String fileIdx);
 
 }

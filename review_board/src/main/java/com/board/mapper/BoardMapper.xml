@@ -210,5 +210,12 @@
 	        FROM SPABOARD.TB_FILE
 	        WHERE BOARD_NO = #{boardNo}
 	    </select>
+	    
+	    
+	    <!-- 파일정보 DB삭제 -->
+	    <delete id="delFileDb">
+  	    	DELETE FROM SPABOARD.TB_FILE
+    		WHERE FILE_IDX = #{fileIdx}
+	    </delete>
 	
 </mapper>

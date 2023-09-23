@@ -341,8 +341,6 @@ public class BoardController {
     	//파일정보 가져오기
     	FileVo fileInfo = boardService.qryFileInfo(fileIdx);
     	
-    	log.info("???????????????123123");
-    	
 		String fileName = fileInfo.getOrigin_name();
 		
 		byte[] files = FileUtils.readFileToByteArray(new File(fileInfo.getFile_path()));
@@ -359,30 +357,26 @@ public class BoardController {
     
     
     
-    /** 업로드 파일 삭제
-     */
+	/**
+	 * 상세 설명
+	 * 파일 삭제
+	 * @author 최영철
+	 * @since 2023. 9. 9.
+	 * @see
+	 *
+	 *      <pre>
+	 * << 개정이력(Modification Information) >>
+	 *
+	 * 수정일           수정자          수정내용
+	 * ------------ ----------- ---------------------------
+	 *
+	 *      </pre>
+	 */
     @PostMapping("/removeFile")
     @ResponseBody
     public Map<String, Object> removeFile(@RequestParam("fileIdx") String fileIdx) {
     	
-    	log.info("77777777777777777 {}",fileIdx);
-    	
-    	Map<String, Object> response = new HashMap<>();
-
-       // String srcFileName = null;
-       // 
-       // String uploadPath = "";
-       //
-       // 	
-       // //UUID가 포함된 파일이름을 디코딩해줍니다.
-       // File file = new File(uploadPath +File.separator + srcFileName);
-       // boolean result = file.delete();
-       //
-       // File thumbnail = new File(file.getParent(),"s_"+file.getName());
-       // //getParent() - 현재 File 객체가 나태내는 파일의 디렉토리의 부모 디렉토리의 이름 을 String으로 리턴해준다.
-       // result = thumbnail.delete();
-        return response;
-        
+        return boardService.removeFile(fileIdx);
         
     }
     

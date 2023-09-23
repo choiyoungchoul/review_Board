@@ -335,12 +335,12 @@ public class BoardService {
         
         
         //이미 저장된 파일이 있을 경우 update 처리
-        if(fileCheckInfo.getFile_idx() > 0) {
+        if(fileCheckInfo != null && fileCheckInfo.getFile_idx() > 0) {
         	
         	//update 할 file index
         	fileVo.setFile_idx(fileCheckInfo.getFile_idx());
         	
-        	//물리적인 경로에 있는 기존 파일 삭제
+        	//물리적인 경로에 있는 파일 삭제
         	File fileToDelete = new File(fileCheckInfo.getFile_path());
         	fileToDelete.delete();
         	
@@ -387,7 +387,7 @@ public class BoardService {
     
 	/**
 	 * 상세 설명
-	 * 파일 정보 조회 서비스
+	 * 파일 삭제
 	 * @author 최영철
 	 * @since 2023. 9. 8.
 	 * @parameter
@@ -403,35 +403,38 @@ public class BoardService {
 	 *
 	 *      </pre>
 	 */
-    @PostMapping("/removeFile")
-    public ResponseEntity<Boolean> removeFile(String fileName){
-
-        String srcFileName = null;
-        
-        String uploadPath = "";
-        
-        File file;
-
-        try{
+    @Transactional
+    public Map<String, Object> removeFile (String fileIdx) {
+    	
+    	Map<String, Object> response = new HashMap<>();
+    	
+    	try {
+    		
+    		//파일정보 가져오기
+        	FileVo fileInfo = boardMapper.qryFileInfo(fileIdx);
         	
-        	file = new File(fileName);
+        	//파일 삭제 처리
+        	if(fileInfo != null) {
+        		
+        		//물리적 경로에 있는 파일 삭제
+            	File fileToDelete = new File(fileInfo.getFile_path());
+            	
+            	fileToDelete.delete();
+            	
+        		//DB에서도 파일 삭제
+            	response.put("result", boardMapper.delFileDb(fileIdx));
+            	
+        	}
         	
-            srcFileName = URLDecoder.decode(fileName,"UTF-8");
-            //UUID가 포함된 파일이름을 디코딩해줍니다.
-
-
-            File thumbnail = new File(file.getParent(),"s_"+file.getName());
-            //getParent() - 현재 File 객체가 나태내는 파일의 디렉토리의 부모 디렉토리의 이름 을 String으로 리턴해준다.
-            boolean result = thumbnail.delete();
-            return new ResponseEntity<>(result,HttpStatus.OK);
-            
-        }catch (UnsupportedEncodingException e){
         	
-            e.printStackTrace();
-            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
-            
-        }
-        
+		} catch (Exception e) {
+			
+			log.info("파일삭제 중 실패");
+		}
+
+    	
+    	return response;
+    	
     }
     
     
