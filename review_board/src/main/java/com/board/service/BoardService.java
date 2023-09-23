@@ -234,7 +234,6 @@ public class BoardService {
 		
 		//컨텐츠 정보도 같이 수정
 		int contents_Upd_Yn = boardMapper.qryUpdContents(boardVo);
-
 		
 		if(board_Upd_Yn == 1 && contents_Upd_Yn == 1) {
 			result = 1;
