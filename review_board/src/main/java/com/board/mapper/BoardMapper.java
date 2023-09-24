@@ -71,5 +71,8 @@ public interface BoardMapper {
 	
 	//파일 삭제(DB)
 	int delFileDb (String fileIdx);
+	
+	//리뷰 상위 랭크 가져오기 쿼리
+	List<BoardVo> qryRankContents();
 
 }

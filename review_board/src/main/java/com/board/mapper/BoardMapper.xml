@@ -217,5 +217,16 @@
   	    	DELETE FROM SPABOARD.TB_FILE
     		WHERE FILE_IDX = #{fileIdx}
 	    </delete>
+	    
+	    
+	    <!-- TOP3 차트 정보 가져오기 -->
+	    <select id="qryRankContents" resultType="com.board.vo.BoardVo">
+	    	SELECT CONTENTS_TITLE, AVG(`GRADES`) AS AVG_COUNT, COUNT(`CONTENTS_TITLE`) AS COUNT
+			FROM SPABOARD.TB_NETFLIX
+			GROUP BY CONTENTS_TITLE
+			HAVING COUNT >= 3
+			ORDER BY AVG_COUNT DESC
+			LIMIT 3
+	    </select>
 	
 </mapper>

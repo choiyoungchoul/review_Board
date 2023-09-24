@@ -107,10 +107,17 @@ public class BoardController {
         //메인화면 게시글 목록 가져오기
     	mv.addObject("boardList", boardService.selectList(insParam));       
     	mv.addObject("totalCount", totalCount);  
+    	
     	//페이지 정보 가져오기( GetPageInfo(총 페이지 개수, 현재 페이지, 총 게시글 수))
     	mv.addObject("pageInfo", boardService.GetPageInfo(1, 10, Long.valueOf(totalCount))); 
+    	
     	//넷플릭스 TOP10 목록
     	mv.addObject("itemList", itemList); 
+    	
+    	//차트로 표시 할 TOP3 정보
+    	mv.addObject("qryRankContentList", boardService.qryRankContents());
+    	
+    	log.info("1111111111111111111111111111 {}" ,  boardService.qryRankContents());
         
         //로그인 상태면 접속 user 정보 화면에 노출
         if(user != null) {
