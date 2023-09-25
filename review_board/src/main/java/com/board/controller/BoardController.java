@@ -115,6 +115,19 @@ public class BoardController {
     	mv.addObject("itemList", itemList); 
     	
     	//차트로 표시 할 TOP3 정보
+    	List<BoardVo> tempList = boardService.qryRankContents();
+    	
+    	if(tempList.size() > 0) {
+    		
+        	for(int i=0; i<tempList.size(); i++) {
+        		
+        		String[] title = tempList.get(i).getContents_title().toString();
+        				
+        	}
+        	
+    	}
+
+    	
     	mv.addObject("qryRankContentList", boardService.qryRankContents());
     	
     	log.info("1111111111111111111111111111 {}" ,  boardService.qryRankContents());

@@ -1116,6 +1116,7 @@ var context = document
     .getContext('2d');
     
 var myChart = new Chart(context, {
+	
     type: 'bar', // 차트의 형태
     data: { // 차트에 들어갈 데이터
         labels: [
