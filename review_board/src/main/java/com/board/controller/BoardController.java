@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,22 +117,26 @@ public class BoardController {
     	
     	//차트로 표시 할 TOP3 정보
     	List<BoardVo> tempList = boardService.qryRankContents();
+
     	
     	if(tempList.size() > 0) {
     		
+    		List<String> titleList = new ArrayList<>();
+    		List<Double> gradeList = new ArrayList<>();
+    		
+    		
         	for(int i=0; i<tempList.size(); i++) {
         		
-        		String[] title = tempList.get(i).getContents_title().toString();
-        				
+        		titleList.add(tempList.get(i).getContents_title());
+        		gradeList.add(tempList.get(i).getAvg_grades());
+        		
         	}
+        	
+        	mv.addObject("chartTitle", titleList);
+        	mv.addObject("chartGrade", gradeList);
         	
     	}
 
-    	
-    	mv.addObject("qryRankContentList", boardService.qryRankContents());
-    	
-    	log.info("1111111111111111111111111111 {}" ,  boardService.qryRankContents());
-        
         //로그인 상태면 접속 user 정보 화면에 노출
         if(user != null) {
         	mv.addObject("userName", user.getUsername());                //로그인 유저 이름

@@ -44,5 +44,6 @@ public class BoardVo {
 	private String regdate;
 	private String file_idx;
 	private String origin_name;
+	private double avg_grades;
 
 }

@@ -1115,6 +1115,12 @@ var context = document
     .getElementById('myChart')
     .getContext('2d');
     
+    var chartTitle = '${chartTitle}';
+    var chartGrade = '${chartGrade}';
+    
+    console.log(chartTitle);
+    console.log(chartGrade);
+    
 var myChart = new Chart(context, {
 	
     type: 'bar', // 차트의 형태
