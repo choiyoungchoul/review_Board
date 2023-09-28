@@ -432,8 +432,16 @@ var loginId = "";
 //공백 문자확인
 var blank_pattern = /^\s+|\s+$/g;
 
+//차트 데이터
+var chartTitle = '${chartTitle}';
+var chartGrade = '${chartGrade}';
+
+var chartTitleArr = chartTitle.replace(/[\[\]]/g, '').split(',');
+var chartGrade = chartGrade.replace(/[\[\]]/g, '').split(',');
+
 
 $(document ).ready(function() {
+	
 	
 	  $('#insContent').summernote({
 		  height: 350,
@@ -1114,21 +1122,14 @@ var delFileSubmit = function(file_idx) {
 var context = document
     .getElementById('myChart')
     .getContext('2d');
-    
-    var chartTitle = '${chartTitle}';
-    var chartGrade = '${chartGrade}';
-    
-    console.log(chartTitle);
-    console.log(chartGrade);
-    
+
 var myChart = new Chart(context, {
 	
     type: 'bar', // 차트의 형태
     data: { // 차트에 들어갈 데이터
-        labels: [
+        labels: 
             //x 축
-            '우영우','더글로리','오징어게임'
-        ],
+        	chartTitleArr,
         
         datasets: [
             { //데이터
@@ -1136,7 +1137,7 @@ var myChart = new Chart(context, {
                 fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
                 
                 //x축 label에 대응되는 데이터 값
-                data: [3,2,5],
+                data: chartGrade,
                 
                 backgroundColor: [
                     //색상
