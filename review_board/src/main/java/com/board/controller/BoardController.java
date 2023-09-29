@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
+import java.text.DecimalFormat;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,14 +122,16 @@ public class BoardController {
     	
     	if(tempList.size() > 0) {
     		
-    		List<String> titleList = new ArrayList<>();
-    		List<Double> gradeList = new ArrayList<>();
+    		List<String> titleList = new ArrayList<>();    //차트 상위 컨텐츠 제목
+    		List<String> gradeList = new ArrayList<>();    //차트 상위 컨텐츠 점수
     		
+    		//리뷰평점은 소수점 한자리만 까지만 표시
+    		DecimalFormat df = new DecimalFormat("#.#");
     		
         	for(int i=0; i<tempList.size(); i++) {
         		
         		titleList.add(tempList.get(i).getContents_title());
-        		gradeList.add(tempList.get(i).getAvg_grades());
+        		gradeList.add(df.format(tempList.get(i).getAvg_grades()));
         		
         	}
         	

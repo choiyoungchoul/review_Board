@@ -11,6 +11,7 @@
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link href="/resources/css/star.css" rel="stylesheet"/>
+	<link href="/resources/css/tooltip.css" rel="stylesheet"/>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -36,9 +37,9 @@
 				<li>
 					<a id="loginBtn" type="button" class="btn btn-primary" style="display:none" href="/member/login">로그인</a>
 					<a id="joinBtn" type="button" class="btn btn-primary" style="display:none" href="/board/join">회원가입</a>
-					<button id="memberTxt" type="button" class="btn btn-primary" style="display:none"></button>
+					<button id="memberTxt" type="button" class="btn btn-primary" style="display:none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="내가 작성한 리뷰를 볼 수 있습니다."></button>
 			        <form id="logoutBtn" class="btn btn-danger"  method="post" action="/logout" style="display:none">로그아웃</form>
-			        <button type="button" class="btn btn-success" onclick="chartPopup()">랭크차트</button>
+			        <button type="button" class="btn btn-success" onclick="chartPopup()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="평점순으로 차트를 볼 수 있습니다.">베스트 평점</button>
 				</li>
 		      </ul>
 		      <div class="d-flex">
@@ -406,7 +407,7 @@
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">상위리뷰</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">리뷰평점</h5>
 		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		      </div>
 		      <div class="modal-body">
@@ -1168,6 +1169,17 @@ var myChart = new Chart(context, {
         }
     }
 });
+
+
+//부트스트랩 tooltip
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+  
+})
+
 
     
 </script>
