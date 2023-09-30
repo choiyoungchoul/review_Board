@@ -11,7 +11,6 @@
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link href="/resources/css/star.css" rel="stylesheet"/>
-	<link href="/resources/css/tooltip.css" rel="stylesheet"/>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -39,7 +38,7 @@
 					<a id="joinBtn" type="button" class="btn btn-primary" style="display:none" href="/board/join">회원가입</a>
 					<button id="memberTxt" type="button" class="btn btn-primary" style="display:none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="내가 작성한 리뷰를 볼 수 있습니다."></button>
 			        <form id="logoutBtn" class="btn btn-danger"  method="post" action="/logout" style="display:none">로그아웃</form>
-			        <button type="button" class="btn btn-success" onclick="chartPopup()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="평점순으로 차트를 볼 수 있습니다.">베스트 평점</button>
+			        <button type="button" class="btn btn-success" onclick="chartPopup()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="평점순으로 차트를 볼 수 있습니다.">평점랭크</button>
 				</li>
 		      </ul>
 		      <div class="d-flex">
@@ -92,21 +91,35 @@
 			
 				<div style="text-align:center;">
 					<div id="pagination" class="btn-group" role="group" aria-label="Basic example" data-value="${pageInfo.currentPageNum}" >
+					
 					  <c:if test="${boardList.size() > 0}">
-						<c:if test="${pageInfo.isPrevExist == true && pageInfo.currentPageNum > 5}">
-							<button type="button" class="btn btn-outline-primary active" onclick="pageFn(this)" data-value="${pageInfo.blockFirstPageNum - 1}">이전</button>
-						</c:if>	
-				        <c:if test="${pageInfo.totalPostCount > 0 }">
-				            <c:forEach var="list" items="${pageInfo.pageList}">
-								<button type="button" class="btn btn-outline-primary ${list ==  pageInfo.currentPageNum ? "active" : ""}" onclick="pageFn(this)" data-value="${list}" ">
-				                    ${list}
-								</button>
-				            </c:forEach>
-				        </c:if>
-				        <c:if test="${pageInfo.isNextExist == true}">
-							<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="${pageInfo.blockLastPageNum + 1}" >다음</button>
-						</c:if>
+					  		
+					  		<c:if test="${pageInfo.isPrevExist == true && pageInfo.currentPageNum > 10}">
+						  		<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="${1}">&lt;&lt;</button>
+					  		</c:if>
+						  
+							<c:if test="${pageInfo.isPrevExist == true && pageInfo.currentPageNum > 5}">
+								<button type="button" class="btn btn-outline-primary active" onclick="pageFn(this)" data-value="${pageInfo.blockFirstPageNum - 1}">&lt;</button>
+							</c:if>	
+							
+					        <c:if test="${pageInfo.totalPostCount > 0 }">
+					            <c:forEach var="list" items="${pageInfo.pageList}">
+									<button type="button" class="btn btn-outline-primary ${list ==  pageInfo.currentPageNum ? "active" : ""}" onclick="pageFn(this)" data-value="${list}" ">
+					                    ${list}
+									</button>
+					            </c:forEach>
+					        </c:if>
+					        
+					        <c:if test="${pageInfo.isNextExist == true}">
+								<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="${pageInfo.blockLastPageNum + 1}" >&gt;</button>
+							</c:if>
+							
+							<c:if test="${pageInfo.isNextExist == true}">
+								<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="${pageInfo.totalLastPageNum}">&gt;&gt;</button>
+							</c:if>
+							
 				      </c:if>	
+				      
 				   </div>
 				</div>
 			</div>	
@@ -167,7 +180,7 @@
 					                            <tr style="line-height:32px;">
 					                                <td style="font-weight: 800">제목</td>
 					                                <td>
-					                                    <input type="text" name="title" class="form-control" value="">
+					                                    <input id="insTitle" type="text" name="title" class="form-control" value="">
 					                                </td>
 					                            </tr>
 					                            <tr>
@@ -204,7 +217,7 @@
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-		        <button type="button" class="btn btn-primary" onclick="writeSubmit()" data-bs-dismiss="modal" data-bs-dismiss="modal">완료</button>
+		        <button type="button" class="btn btn-primary" onclick="writeSubmit()">완료</button>
 		      </div>
 		    </div>
 		  </div>
@@ -657,6 +670,86 @@ var delFileConfirm = function (file_idx) {
 	
 }
 
+
+// 유효성 검사
+var checkVaildation = function (type) {
+	
+	
+
+		var flag = true;
+	
+		//글 작성 유효성 검사
+		if(type == 'ins') {
+			
+			//선택된 컨텐츠
+	        var selectContents = $("#contentsList").val();
+			var selType = "sel";
+			
+	        if(selectContents != "select") {
+	        	
+	         	$("#contents-txt").val(selectContents);
+	         	selType = "text";
+	         	
+	        }
+	
+			
+			//컨텐츠 제목
+			if(selType == 'sel') {
+				
+				openPopup("컨텐츠를 선택해 주세요.");
+				flag = false;
+				
+			} else if (selType == 'text' && $("#contents-txt").val() == '') {
+				
+				openPopup("컨텐츠명을 입력해 주세요.");
+				flag = false;
+				
+			} else {
+				
+				flag = true;
+				
+			}
+			
+			
+			
+			//제목
+			if($("#insTitle").val() == '') {
+				
+				openPopup("제목을 작성해 주세요.");
+				flag = false;
+				
+			}
+			
+			//내용
+			if($("#insContent").val() == '') {
+				
+				openPopup("내용을 작성해 주세요.");
+				flag = false;
+				
+			}
+			
+			//별점
+			if($("#contents-txt").val() == '') {
+				
+				openPopup("별점을 선택해 주세요.");
+				flag = false;
+				
+			}
+			
+			
+		//글 수정 유효성 검사
+		}else {
+			
+			
+			
+		}
+		
+		
+		return flag;
+	
+}
+
+
 //글상세 내용 가져오는 aJax
 var detailPopup = function (index) {
 	
@@ -781,34 +874,43 @@ var writeSubmit = function() {
 		  $("#contents-txt").val(selectContents);
 	  }
 	  
-	  var data = $("#writeForm").serializeArray();
 	  
+	  //유효성 검사
+	  if(checkVaildation('ins')) {
+		  
+		  alert("유효성 통과");
+		  
+		  var data = $("#writeForm").serializeArray();
+		  
+		  
+	 	//   	$.ajax({                                      
+		//	   	url : "/board/writeProcess",                
+		//	   	type : 'POST',                              
+		//	   	async : false,                              
+		//	   	data : data,                                
+		//	   	dataType: 'json',   
+		//	   	success : function(data) {
+		//		
+		//	   		if (data.result == 1) {
+		//	   			
+		//	   			//첨부된 파일이 있을경우 file 업로드 함수 실행
+		//	   			if($("#insFile").val() != '') {
+		//		   			fileUpload(data.idx, 'w');
+		//	   			}else {
+		//		   			openPopup("글작성이 완료 되었습니다.", "Y");
+		//	   			}
+		//	   			
+		//	   		}else {
+		//	   			openPopup("처리중 오류가 발생 했습니다."); 
+		//	   		}
+		//	   		
+		//	   	}, error : function(e) {
+		//	   		openPopup("서버 오류가 발생 했습니다.");  
+		//	   	}                                           
+		//   });   
+	 	
+	  }
 	  
- 	   	$.ajax({                                      
-		   	url : "/board/writeProcess",                
-		   	type : 'POST',                              
-		   	async : false,                              
-		   	data : data,                                
-		   	dataType: 'json',   
-		   	success : function(data) {
-			
-		   		if (data.result == 1) {
-		   			
-		   			//첨부된 파일이 있을경우 file 업로드 함수 실행
-		   			if($("#insFile").val() != '') {
-			   			fileUpload(data.idx, 'w');
-		   			}else {
-			   			openPopup("글작성이 완료 되었습니다.", "Y");
-		   			}
-		   			
-		   		}else {
-		   			openPopup("처리중 오류가 발생 했습니다."); 
-		   		}
-		   		
-		   	}, error : function(e) {
-		   		openPopup("서버 오류가 발생 했습니다.");  
-		   	}                                           
-	   });   
 }
 
 
@@ -1009,6 +1111,7 @@ var reloadList = function(data) {
             html +=	          '</td>';
             html +=	          '<td style="color:olive;"><b>'+list[i].contents_title+'</b></td>';
             html +=	          '<td>'+list[i].writer+'</td>';
+            html +=	          '<td>'+list[i].regdate+'</td>';
             html +=	       '</tr>';
 
         }
@@ -1019,8 +1122,12 @@ var reloadList = function(data) {
 	    //페이징 비동기 처리
 	    if(totalCnt > 0) {
 	    	
+	    	if (pageInfo.isPrevExist == true && pageInfo.currentPageNum > 10) {
+	    		pageHtml += '<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="'+ 1 +'">&lt;&lt;</button>';
+	    	}
+	    	
 	        if (pageInfo.isPrevExist == true && pageInfo.currentPageNum > 5) {
-	            pageHtml += '<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="'+ (pageInfo.blockFirstPageNum - 1) +'">이전</button>';
+	            pageHtml += '<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="'+ (pageInfo.blockFirstPageNum - 1) +'">&lt;</button>';
 	        }
 	
 	        if (pageInfo.totalPostCount > 0) {
@@ -1032,7 +1139,11 @@ var reloadList = function(data) {
 	        }
 	
 	        if(pageInfo.isNextExist == true) {
-	            pageHtml += '<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="'+ (pageInfo.blockLastPageNum + 1) +'" >다음</button>';
+	            pageHtml += '<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="'+ (pageInfo.blockLastPageNum + 1) +'" >&gt;</button>';
+	        }
+	        
+	        if(pageInfo.isNextExist == true) {
+	            pageHtml += '<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="'+ (pageInfo.totalLastPageNum) +'" >&gt;&gt;</button>';
 	        }
 	        
 	        $('#pagination').html(pageHtml);
