@@ -94,7 +94,7 @@
 					
 					  <c:if test="${boardList.size() > 0}">
 					  		
-					  		<c:if test="${pageInfo.isPrevExist == true && pageInfo.currentPageNum > 10}">
+					  		<c:if test="${pageInfo.isPrevExist == true && pageInfo.currentPageNum > 5}">
 						  		<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="${1}">&lt;&lt;</button>
 					  		</c:if>
 						  
@@ -174,7 +174,7 @@
 					                            <tr>
 					                            	<td style="font-weight: 800">컨텐츠 URL</td>
 					                                <td>
-					                                    <input type="text" name="contents" class="form-control" value="">
+					                                    <input id="insContentUrl" type="text" name="contents" class="form-control" value="">
 					                                </td>
 					                            </tr>
 					                            <tr style="line-height:32px;">
@@ -458,13 +458,17 @@ $(document ).ready(function() {
 	
 	
 	  $('#insContent').summernote({
+		  
 		  height: 350,
 		  lang: "ko-KR"
+		  
 	   });
 	  
 	  $('#updContent').summernote({
+		  
 		  height: 350,
 		  lang: "ko-KR"
+		  
 	   });
 	  
 	  //현재 로그인중인 아이디 확인
@@ -484,38 +488,58 @@ $(document ).ready(function() {
 	  	$("#memberTxt").text(loginTxt);
 	  	
 	  }else {
+		  
 		//비로그인 메뉴 show
 	  	$("#loginBtn").show();
 	  	$("#joinBtn").show();
+	  	
 	  }
 	  
 	  
 	  //작성글 여부에 따라 display 처리
 	  if(totCnt > 0) {
+		  
 		  $("#boardTable").show();
+		  
 	  }else {
+		  
 		  $("#noneList").show();
+		  
 	  }
 	  
 });
 
 //로그아웃 이벤트
 $("#logoutBtn").on("click", function() {
+	
 	$('#logoutBtn').submit();
+	
 });
 
 
 //검색 enter 이벤트 제어
 $(document).on("keypress", "#srchTxt", function(e) {
+	
+	
   if (e.which==13){
+	  
 	  if($("#srchTxt").val() == "" || $("#srchTxt").val() == null || $("#srchTxt").val().replace(blank_pattern, "" ) == "") {
+		  
 		  openPopup("검색어를 입력해 주세요.");
+		  
 	  }else if($("#srchSel").val() == "" || $("#srchSel").val() == null) {
+		  
 	  	  openPopup("검색 할 카테고리를 선택해 주세요.");
+	  	  
 	  }else {
+		  
 		  srchFn();
+		  
 	  }
   }
+  
+  
+  
 });
 
 
@@ -534,6 +558,7 @@ $("#contentsList").on("change", function() {
 
 //별점 선택시 동적 UI 이벤트 함수
 $('.stars .fa').click(function() {
+	
     $(this).addClass('active');
 
     // 클릭한 별을 기준으로 (.fa) 그 이전 별은 보이게 그 뒤에 별들은 안보이게
@@ -543,21 +568,36 @@ $('.stars .fa').click(function() {
     // 순서를 찾는 메서드 index 0 1 2 3 4
     // 텍스트내용을 출력 text, 태그+텍스트 html
     var num = $(this).index();
+    
     $('.print').text(starRate);
+    
     var starRate = num + 1
+    
     if(starRate == 1) {
+    	
         // $('.print').text('별로에요');
         $('.print').html('<img src="img/icon/star-lv1.png">' + '별로에요');
+        
     } else if(starRate == 2) {
+    	
         $('.print').html('<img src="img/icon/star-lv2.png">' + '보통 이에요');
+        
     } else if(starRate == 3) {
+    	
         $('.print').html('<img src="img/icon/star-lv3.png">' + '그냥 그래요');
+        
     } else if(starRate == 4) {
+    	
         $('.print').html('<img src="img/icon/star-lv4.png">' + '맘에 들어요');
+        
     } else {
+    	
         $('.print').html('<img src="img/icon/star-lv4.png">' + '아주 좋아요');
+        
     }
+    
 });
+
 
 
 
@@ -601,7 +641,9 @@ var openConfPopup = function(text, type, idx) {
 
 //reload 처리 함수
 var reloadFn = function() {
+	
 	location.reload();
+	
 }
 	
 
@@ -611,18 +653,32 @@ var writePopup = function () {
 	
 	 //비로그인 상태면 로그인 alert 노출
 	 if(loginId == "" || loginId == null) {
+		 
 		 openPopup("로그인 후 작성해 주세요.");
+		 
 	 }else {
+		 
 		 //로그인 상태면  팝업 띄우기
 	    $('#weriteModal').modal('show');
 		$('input[name=id]').val(loginId); 
+		
+		//작성됐던 데이터 초기화
+		$("#contentsList").prop("selectedIndex", 0);
+		$("#contents-txt").val('');
+		$("#insContentUrl").val('');
+		$("#insTitle").val('');
+		$("#insContent").summernote('code', '');
+		$("input[name='grades']").prop("checked", false);
+		
 	 }
 	 
 }
 
 //랭크 차트 팝업 띄우는 이벤트
 var chartPopup = function () {
+	
     $('#chartModal').modal('show');
+    
 }
 
 
@@ -651,7 +707,11 @@ var updatePopup = function (idx, fileIdx) {
 var updConfirm = function (idx) {
 	
 	//validation 체크
-	openConfPopup("수정 하시겠습니까?", "upd" ,idx);
+	if(checkValidation('upd')) {
+		
+		openConfPopup("수정 하시겠습니까?", "upd" ,idx);
+		
+	}
 	
 }
 
@@ -672,74 +732,109 @@ var delFileConfirm = function (file_idx) {
 
 
 // 유효성 검사
-var checkVaildation = function (type) {
-	
-	
+var checkValidation = function (type) {
 
+	
 		var flag = true;
 	
+		
 		//글 작성 유효성 검사
 		if(type == 'ins') {
 			
-			//선택된 컨텐츠
-	        var selectContents = $("#contentsList").val();
-			var selType = "sel";
-			
-	        if(selectContents != "select") {
-	        	
-	         	$("#contents-txt").val(selectContents);
-	         	selType = "text";
-	         	
-	        }
-	
-			
-			//컨텐츠 제목
-			if(selType == 'sel') {
+				//선택된 컨텐츠
+		        var selectContents = $("#contentsList option:selected").text();
+				var selType = "sel";
 				
-				openPopup("컨텐츠를 선택해 주세요.");
-				flag = false;
+		        if(selectContents != "선택해 주세요.") {
+		        	
+		         	$("#contents-txt").val(selectContents);
+		         	selType = "text";
+		         	
+		        }
+		
 				
-			} else if (selType == 'text' && $("#contents-txt").val() == '') {
+				//컨텐츠 제목
+				if(selType == 'sel' && selectContents == '선택해 주세요.') {
+					
+					openPopup("컨텐츠를 선택해 주세요.");
+					flag = false;
+					return false;
+					
+				} else if (selType == 'text' && $("#contents-txt").val() == '직접입력') {
+					
+					openPopup("컨텐츠명을 입력해 주세요.");
+					flag = false;
+					return false;
+					
+				} else {
+					
+					flag = true;
+					
+				}
 				
-				openPopup("컨텐츠명을 입력해 주세요.");
-				flag = false;
 				
-			} else {
+				//제목
+				if($("#insTitle").val() == '') {
+					
+					openPopup("제목을 작성해 주세요.");
+					flag = false;
+					return false;
+					
+				}
 				
-				flag = true;
+				//내용
+				var summernoteContent = $("#insContent").summernote('code').replace(/<[^>]*>/g, '');
 				
-			}
-			
-			
-			
-			//제목
-			if($("#insTitle").val() == '') {
+				if(summernoteContent == '') {
+					
+					openPopup("내용을 작성해 주세요.");
+					flag = false;
+					return false;
+					
+				}
 				
-				openPopup("제목을 작성해 주세요.");
-				flag = false;
-				
-			}
-			
-			//내용
-			if($("#insContent").val() == '') {
-				
-				openPopup("내용을 작성해 주세요.");
-				flag = false;
-				
-			}
-			
-			//별점
-			if($("#contents-txt").val() == '') {
-				
-				openPopup("별점을 선택해 주세요.");
-				flag = false;
-				
-			}
+				//별점
+				if(!$("input[name='grades']:checked").val()) {
+					
+					openPopup("별점을 선택해 주세요.");
+					flag = false;
+					return false;
+					
+				}
 			
 			
 		//글 수정 유효성 검사
 		}else {
 			
+				//컨텐츠 제목
+				if($("#updCntTitle").val() == '') {
+					
+					openPopup("컨텐츠 제목을 입력해 주세요.");
+					flag = false;
+					return false;
+					
+				}
+				
+				
+				//제목
+				if($("#updTitle").val() == '') {
+					
+					openPopup("제목을 작성해 주세요.");
+					flag = false;
+					return false;
+					
+				}
+				
+				//내용
+				var summernoteContent = $("#updContent").summernote('code').replace(/<[^>]*>/g, '');
+				
+				if(summernoteContent == '') {
+					
+					openPopup("내용을 작성해 주세요.");
+					flag = false;
+					return false;
+					
+				}
 			
 			
 		}
@@ -876,38 +971,37 @@ var writeSubmit = function() {
 	  
 	  
 	  //유효성 검사
-	  if(checkVaildation('ins')) {
+	  if(checkValidation('ins')) {
 		  
-		  alert("유효성 통과");
 		  
 		  var data = $("#writeForm").serializeArray();
 		  
 		  
-	 	//   	$.ajax({                                      
-		//	   	url : "/board/writeProcess",                
-		//	   	type : 'POST',                              
-		//	   	async : false,                              
-		//	   	data : data,                                
-		//	   	dataType: 'json',   
-		//	   	success : function(data) {
-		//		
-		//	   		if (data.result == 1) {
-		//	   			
-		//	   			//첨부된 파일이 있을경우 file 업로드 함수 실행
-		//	   			if($("#insFile").val() != '') {
-		//		   			fileUpload(data.idx, 'w');
-		//	   			}else {
-		//		   			openPopup("글작성이 완료 되었습니다.", "Y");
-		//	   			}
-		//	   			
-		//	   		}else {
-		//	   			openPopup("처리중 오류가 발생 했습니다."); 
-		//	   		}
-		//	   		
-		//	   	}, error : function(e) {
-		//	   		openPopup("서버 오류가 발생 했습니다.");  
-		//	   	}                                           
-		//   });   
+	 	   	$.ajax({                                      
+			   	url : "/board/writeProcess",                
+			   	type : 'POST',                              
+			   	async : false,                              
+			   	data : data,                                
+			   	dataType: 'json',   
+			   	success : function(data) {
+				
+			   		if (data.result == 1) {
+			   			
+			   			//첨부된 파일이 있을경우 file 업로드 함수 실행
+			   			if($("#insFile").val() != '') {
+				   			fileUpload(data.idx, 'w');
+			   			}else {
+				   			openPopup("글작성이 완료 되었습니다.", "Y");
+			   			}
+			   			
+			   		}else {
+			   			openPopup("처리중 오류가 발생 했습니다."); 
+			   		}
+			   		
+			   	}, error : function(e) {
+			   		openPopup("서버 오류가 발생 했습니다.");  
+			   	}                                           
+		   });   
 	 	
 	  }
 	  
@@ -916,6 +1010,7 @@ var writeSubmit = function() {
 
 //글 수정 aJax
 var updSubmit = function(idx) {
+	
 	
 	//변경 할 index set
 	$("#updIdx").val(idx);
@@ -952,6 +1047,8 @@ var updSubmit = function(idx) {
 		   		openPopup("서버 오류가 발생 했습니다.");  
 		   	}                                           
 	   }); 
+	
+	
 	
 }
 
@@ -1122,7 +1219,7 @@ var reloadList = function(data) {
 	    //페이징 비동기 처리
 	    if(totalCnt > 0) {
 	    	
-	    	if (pageInfo.isPrevExist == true && pageInfo.currentPageNum > 10) {
+	    	if (pageInfo.isPrevExist == true && pageInfo.currentPageNum > 5) {
 	    		pageHtml += '<button type="button" class="btn btn-outline-primary" onclick="pageFn(this)" data-value="'+ 1 +'">&lt;&lt;</button>';
 	    	}
 	    	
