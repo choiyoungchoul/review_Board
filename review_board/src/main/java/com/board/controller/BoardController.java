@@ -1,42 +1,22 @@
 package com.board.controller;
 
-import java.awt.PageAttributes.MediaType;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.net.http.HttpHeaders;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.filechooser.FileSystemView;
 import java.text.DecimalFormat;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.UriUtils;
 
 import com.board.service.BoardService;
 import com.board.vo.BoardVo;
@@ -54,9 +33,6 @@ import com.configuration.AdminAuthorize;
 import com.configuration.UserAuthorize;
 import com.util.Crawling;
 
-import java.io.File;
-import java.net.URLEncoder;
-import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -142,8 +118,10 @@ public class BoardController {
 
         //로그인 상태면 접속 user 정보 화면에 노출
         if(user != null) {
+        	
         	mv.addObject("userName", user.getUsername());                //로그인 유저 이름
         	mv.addObject("userAuthoritie", user.getAuthorities());       //로그인 유저의 권한(회원등급)
+        	
         }
         
         //return view
@@ -266,7 +244,9 @@ public class BoardController {
     	
     	//현재 로그인 된 사용자명 가져오기
     	if(user != null) {
+    		
     		username = user.getUsername();
+    		
     	}
     	
     	return boardService.qryDetail(username, idx);
@@ -405,6 +385,67 @@ public class BoardController {
     public Map<String, Object> removeFile(@RequestParam("fileIdx") String fileIdx) {
     	
         return boardService.removeFile(fileIdx);
+        
+    }
+    
+    
+    
+	/**
+	 * 상세 설명
+	 * MyPage로 이동
+	 * @author 최영철
+	 * @since 2023. 9. 9.
+	 * @see
+	 *
+	 *      <pre>
+	 * << 개정이력(Modification Information) >>
+	 *
+	 * 수정일           수정자          수정내용
+	 * ------------ ----------- ---------------------------
+	 *
+	 *      </pre>
+	 */
+    @GetMapping("/myPage")
+    public ModelAndView qryMyPageMethod (@AuthenticationPrincipal UserDetails user, GetBoardVo insParam) {
+    	
+        ModelAndView mv = new ModelAndView();
+        
+        //메인 페이지는 최근 등록 된 게시글 순으로 보여짐
+        insParam.setPage(0);
+        insParam.setAmount(10);
+        
+        
+        //현재 로그인한 작성자가 작성한 글목록 가져오기
+        //로그인 상태면 접속 user 정보 화면에 노출
+        if(user != null) {
+        	
+            insParam.setSrchType("writer");
+            insParam.setSrchTxt(user.getUsername());
+            
+        	mv.addObject("userName", user.getUsername());
+        	
+        }else {
+        	
+        	//로그인 세션이 끊어졌을 경우 로그인 페이지로 이동
+        	return new ModelAndView("redirect:/member/login");
+        	
+        }
+
+    	
+        //작성된 총 게시글 가져오기
+        int totalCount = boardService.qryTotalCount(insParam);
+        
+        //메인화면 게시글 목록 가져오기
+    	mv.addObject("boardList", boardService.selectList(insParam));       
+    	mv.addObject("totalCount", totalCount);  
+    	
+    	//페이지 정보 가져오기( GetPageInfo(총 페이지 개수, 현재 페이지, 총 게시글 수))
+    	mv.addObject("pageInfo", boardService.GetPageInfo(1, 10, Long.valueOf(totalCount))); 
+    	
+        //return view
+        mv.setViewName("/myPage");
+
+        return mv;
         
     }
     

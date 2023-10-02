@@ -36,7 +36,7 @@
 				<li>
 					<a id="loginBtn" type="button" class="btn btn-primary" style="display:none" href="/member/login">로그인</a>
 					<a id="joinBtn" type="button" class="btn btn-primary" style="display:none" href="/board/join">회원가입</a>
-					<button id="memberTxt" type="button" class="btn btn-primary" style="display:none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="내가 작성한 리뷰를 볼 수 있습니다."></button>
+					<a id="memberTxt" type="button" class="btn btn-primary" style="display:none" href="/board/myPage" data-bs-toggle="tooltip" data-bs-placement="bottom" title="내가 작성한 리뷰를 볼 수 있습니다."></a>
 			        <form id="logoutBtn" class="btn btn-danger"  method="post" action="/logout" style="display:none">로그아웃</form>
 			        <button type="button" class="btn btn-success" onclick="chartPopup()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="평점순으로 차트를 볼 수 있습니다.">평점랭크</button>
 				</li>
@@ -494,7 +494,7 @@ $(document ).ready(function() {
 	  	$("#joinBtn").show();
 	  	
 	  }
-	  
+
 	  
 	  //작성글 여부에 따라 display 처리
 	  if(totCnt > 0) {

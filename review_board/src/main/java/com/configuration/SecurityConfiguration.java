@@ -43,6 +43,7 @@ public class SecurityConfiguration {
                 			 "/board/fileUpload",
                 			 "/board/fileDownload",
                 			 "/board/removeFile",
+                			 "/board/myPage",
                 			 "/static/**", 
                 			 "/views/**", 
                 			 "/resources/*/**", 

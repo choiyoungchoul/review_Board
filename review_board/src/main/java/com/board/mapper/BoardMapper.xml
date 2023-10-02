@@ -28,7 +28,7 @@
                           WHERE A.TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "writer"'>
-                          WHERE A.WRITER LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE A.WRITER LIKE CONCAT('%', #{srchTxt})
                       </when>
                   </choose>
              </if>
@@ -51,7 +51,7 @@
                           WHERE TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "writer"'>
-                          WHERE WRITER LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE WRITER LIKE CONCAT('%', #{srchTxt})
                       </when>
                   </choose>
              </if>
