@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                 .antMatchers("/member/naver",
                 			 "/member/login", 
                 			 "/member/joinProcess",
+                			 "/member/checkId",
                 			 "/board/main", 
                 			 "/board/join", 
                 			 "/board/qryBoardList", 

@@ -41,6 +41,7 @@ public class MemberService {
     	Optional<MemberVo> findId = memberMapper.qryGetFindOne(insertedUserId);
 
     	return findId;
+    	
     }
     
 	/**
@@ -65,14 +66,14 @@ public class MemberService {
     	
     	//spring  security에서 제공하는 패스워드 암호화 해주는 함수
     	memberVo.setPassword(passwordEncoder.encode(memberVo.getPassword()));
+    	
     	//회원가입을 통해 들어오는 회원은 user로 ROLE 고정
     	memberVo.setRole("user");
-    	
-    	log.info( "member Vo {}", memberVo);
     	
     	result = memberMapper.insJoinMember(memberVo);
     	
     	return result;
+    	
     }
 
 }

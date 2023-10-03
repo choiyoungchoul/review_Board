@@ -23,7 +23,8 @@
 					<div class="form-group">
 						<label class="col-form-label" for="id">ID</label> 
 						<input type="text" class="form-control" placeholder="ID" id="id" name="id" maxlength="12" >
-						<div class="invalid-feedback" id="idMsg">ID는 필수 입력사항입니다.</div>
+						<button id="idValidation" class="btn btn-primary" type="button" onclick="idCheck()" >중복확인</button>
+						<div class="invalid-feedback" id="idMsg"></div>
 					</div>
 					
 					<div class="form-group">
@@ -137,15 +138,21 @@
 
 <script>
 
+var idCheckYn = false;
+
 //이메일 select 제어 함수
 $("#domain-list").on("change", function() {
     
 	var domainValue = $("#domain-list").val();
 	
 	if(domainValue == "select"){
-	    $("#domain-txt").show();		
+		
+	    $("#domain-txt").show();	
+	    
 	}else {
+		
 		$("#domain-txt").hide();
+		
 	}
 	
 	$("#domain-text").text(domainValue);
@@ -156,7 +163,9 @@ $("#domain-list").on("change", function() {
 var openPopup = function(text, pageMove) {
 	
 	if(pageMove == 'Y') {
+		
 		$('#alertConfmBtn').attr("onclick", "moveLoginPage()");
+		
 	}
 	
 	$('#alertTxt').text(text);
@@ -166,7 +175,65 @@ var openPopup = function(text, pageMove) {
 
 //가입완료 시 로그인 페이지로 이동
 var moveLoginPage = function() {
-     window.location.href = "/board/login";    	
+	
+     window.location.href = "/member/login";    	
+     
+}
+
+
+//Id 중복확인 함수
+var idCheck = function() {
+	
+	   var validation = true
+	
+	   if($("#id").val() != "") {
+		      
+		      var userId = $("#id").val();
+		      
+		   	  var data = { userId: userId };
+	   	
+	           $.ajax({                                     
+		          	url : "/member/checkId",                
+		          	type : 'POST',                              
+		          	async : false,                              
+		          	data : data,  
+		          	dataType: 'json',                           
+		          	success : function(obj) {
+		          		
+		          		//조회된 아이디가 있을 경우
+		          		if(obj.result == 'Y'){
+		          		
+		          			idCheckYn = false;
+		          			openPopup("이미 사용중인 아이디 입니다. 다른 아이디를 입력해 주세요.");
+		          			
+		          		//조회된 아이디가 없을 경우 (ID로 가능)	
+		          		}else {
+		          			
+		          			idCheckYn = true;
+		          			openPopup("사용 가능한 아이디 입니다.");
+		          			
+		          		}
+		          		
+		          		$("#idMsg").hide();
+		          		
+		          	}, error : function(e) {
+		          		
+		          		openPopup("서버 오류가 발생 했습니다.");
+		          		
+		          	}                                           
+	         }); 
+	   	
+       
+	   }else {
+	   		
+		     $("#idMsg").show();
+		     $("#idMsg").text("ID를 먼저 입력해 주세요.");
+		     idCheckYn = false;
+	   	
+	   }
+	   
+	   return idCheckYn;
+	
 }
 
 //영문, 특수문자, 숫자 조합 검증 validation
@@ -178,7 +245,9 @@ var valiPassword = function() {
 	
 	//패스워드 입력 값 검증(영문 대소문자 + 숫자 + 특수문자 조합 검증 validation)
 	if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/.test(password)) {
+		
 		flag = false;
+		
 	}
 	
 	return flag;
@@ -188,69 +257,99 @@ var valiPassword = function() {
 //유효성 체크
 var validation = function() {
 	
-	var flag = "Y";
+	
+		var flag = "Y";
+			
+		//id 체크
+		if(idCheckYn == false) {
+			
+			$('#idMsg').show();
+			$('#idMsg').text("ID 중복 체크를 먼저해 주세요.");
+			$("#id").focus();
+			flag = "N";
+			
+		}else {
+			
+			$('#idMsg').hide();
+			
+		}
 		
-	//id 체크
-	if($("#id").val() == "") {
-		$('#idMsg').show();
-		$("#id").focus();
-		flag = "N";
-	}else {
-		$('#idMsg').hide();
-	}
+		//pw 체크
+		if($("#password").val() == "") {
+			
+		    $('#pwMsg').show();
+		    $("#password").focus();
+		    flag = "N";
+		    
+		}else {
+			
+			$('#pwMsg').hide();
+			
+		}
 	
-	//pw 체크
-	if($("#password").val() == "") {
-	    $('#pwMsg').show();
-	    $("#password").focus();
-	    flag = "N";
-	}else {
-		$('#pwMsg').hide();
-	}
-
-	//입력 값 검증
-	if(valiPassword() == false) {
-		$('#pwMsg').show();
-		$("#password").focus();
-		flag = "N";
-	}else {
-		$('#pwMsg').hide();
-	}
+		//입력 값 검증
+		if(valiPassword() == false) {
+			
+			$('#pwMsg').show();
+			$("#password").focus();
+			flag = "N";
+			
+		}else {
+			
+			$('#pwMsg').hide();
+			
+		}
+		
+		//pw ck 체크
+		if($("#password").val() != $("#passwordCk").val()) {
+			
+			$('#pwckMsg').show();
+			$("#passwordCk").focus();
+			flag = "N";
+			
+		}else {
+			
+			$('#pwckMsg').hide();
+			
+		}
 	
-	//pw ck 체크
-	if($("#password").val() != $("#passwordCk").val()) {
-		$('#pwckMsg').show();
-		$("#passwordCk").focus();
-		flag = "N";
-	}else {
-		$('#pwckMsg').hide();
-	}
-
-	//이름 체크
-	if($("#name").val() == "") {
-		$('#nameMsg').show();
-		$("#name").focus();
-		flag = "N";
-	}else {
-		$('#nameMsg').hide();
-	}
-
-	//이메일 체크
-	if ($("#email").val() == "" || $("#domain-list").val() == "" || ($("#domain-list").val() == "select" && $("#domain-txt").val() == "")) {
-		$('#emailMsg').show();
-		$("#email").focus();
-		flag = "N";
-	}else {
-		$('#emailMsg').hide();
-	}
+		//이름 체크
+		if($("#name").val() == "") {
+			
+			$('#nameMsg').show();
+			$("#name").focus();
+			flag = "N";
+			
+		}else {
+			
+			$('#nameMsg').hide();
+			
+		}
 	
+		//이메일 체크
+		if ($("#email").val() == "" || $("#domain-list").val() == "" || ($("#domain-list").val() == "select" && $("#domain-txt").val() == "")) {
+			
+			$('#emailMsg').show();
+			$("#email").focus();
+			flag = "N";
+			
+		}else {
+			
+			$('#emailMsg').hide();
+			
+		}
+		
+		
+		if(flag == "N") {
+			
+			openPopup("입력 정보를 다시 확인 해주세요.");
+			return false;
+			
+		}
 	
-	if(flag == "N") {
-		openPopup("입력 정보를 다시 확인 해주세요.");
-		return false;
-	}
-
-	return true;
+		return true;
+		
+		
 }
 
 
@@ -275,7 +374,9 @@ var joinSubmit = function () {
 	      
 			  //선택된 domain 주소 포맷팅  
 		  }else {
+			  
 			  email = email + "@" + domain;
+			  
 		  }
 		  
 		  //포맷팅 된 email 셋팅
@@ -283,19 +384,27 @@ var joinSubmit = function () {
 		  
 		  //form data 직렬화
 		  var data = $("#join_form").serializeArray();
-			                                         
+			            
+		  
+		  
 	      $.ajax({                                 
 		      	url : "/member/joinProcess",         
 		      	type : 'POST',                       
 		      	async : false,                       
 		      	data : data,                         
 		      	dataType: 'json',                    
-		      	success : function() {               
+		      	success : function() {   
+		      		
 		      		openPopup("축하합니다 가입이 완료 되었습니다.", "Y");
-		      	}, error : function(e){              
-		      		openPopup("처리중 실패 했습니다.");                 
+		      		
+		      	}, error : function(e){   
+		      		
+		      		openPopup("처리중 실패 했습니다.");   
+		      		
 		      	}                                    
-	      });                                      
+	      });       
+	      
+	      
 	 }  
 		
 }

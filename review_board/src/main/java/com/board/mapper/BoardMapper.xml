@@ -41,17 +41,19 @@
     	<select id="qryTotalCount" resultType="integer">
     		SELECT 
     			COUNT(*)
-    		FROM SPABOARD.TB_BOARD
+    		FROM SPABOARD.TB_BOARD A
+    		INNER JOIN SPABOARD.TB_NETFLIX B
+    		ON A.IDX = B.BOARD_NO
 			<if test="srchTxt != null and srchTxt != ''">
                   <choose>
                       <when test='srchType eq "conTit"'>
-                          WHERE CONTENTS_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE B.CONTENTS_TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "revTit"'>
-                          WHERE TITLE LIKE CONCAT('%', #{srchTxt}, '%')
+                          WHERE A.TITLE LIKE CONCAT('%', #{srchTxt}, '%')
                       </when>
                       <when test='srchType eq "writer"'>
-                          WHERE WRITER LIKE CONCAT('%', #{srchTxt})
+                          WHERE A.WRITER LIKE CONCAT('%', #{srchTxt})
                       </when>
                   </choose>
              </if>

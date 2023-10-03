@@ -34,6 +34,9 @@
         </p>
         <button class="btn btn-lg btn-primary btn-block" type="submit" id="login_btn">로그인</button>
         <a class="btn btn-lg btn-warning btn-block" href="/board/join">회원가입하기</a>
+        <!--<br>
+         <a class="btn btn-lg" href="https://openapi.naver.com/v1/nid/me" style="display: inline-block; width: 300px; height: 50px; background: url('/resources/img/naver_Logo.png') no-repeat center center; background-size: cover; text-indent: -9999px;"></a> -->
+	  
 	    <% String loginFailMsg = (String) request.getAttribute("loginFailMsg"); %>
 	    <% if (loginFailMsg != null) { %>
 	    	<p>

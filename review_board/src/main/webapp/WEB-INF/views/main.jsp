@@ -1129,7 +1129,9 @@ var pageFn = function(pageObj) {
 
     //현재 페이지 번호를 눌렀을 경우
     if(page == currentPage){
+    	
         return false
+        
     }else {
 		
     	currentPage = page;
